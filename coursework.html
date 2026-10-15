@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal | ARTHREYSQUARED Group</title>
+  <meta
+    name="description"
+    content="ARTHREYSQUARED student portal for courseworks, handouts, academic resources, and instructor information."
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">A²</span>
+        <span class="brand-copy">
+          <strong>ARTHREYSQUARED</strong>
+          <small>GROUP</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Company Home</a>
+        <a href="#courses">Courses</a>
+        <a href="#instructor">Instructor</a>
+        <a href="index.html#contact" class="nav-cta">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="course-hero">
+      <div class="container">
+        <span class="section-kicker">ARTHREYSQUARED LEARNING HUB</span>
+        <h1>Student Portal</h1>
+        <p>
+          Courseworks, handouts, learning resources, and instructor information
+          for currently handled subjects.
+        </p>
+      </div>
+    </section>
+
+    <section class="course-shell">
+      <div class="container">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="openTab(event, 'courses')">Courses & Handouts</button>
+          <button class="tab-btn" onclick="openTab(event, 'instructor')">Instructor & Contact</button>
+        </div>
+
+        <div id="courses" class="tab-content active">
+          <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterSchool(event, 'all')">All Subjects (11)</button>
+            <button class="filter-btn" onclick="filterSchool(event, 'msuiit')">MSU-IIT (5)</button>
+            <button class="filter-btn" onclick="filterSchool(event, 'spc')">St. Peter's College (6)</button>
+          </div>
+
+          <!-- EDIT: Replace each Google Drive URL with the actual folder for that subject. -->
+          <section id="section-msuiit" class="school-section">
+            <h2 class="school-header">
+              <span class="school-dot dot-msuiit"></span>
+              MSU-IIT Courses
+            </h2>
+
+            <div class="course-grid">
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge">CET 111</span>
+                    <span class="school-tag">MSU-IIT</span>
+                  </div>
+                  <h3>Architectural Drafting</h3>
+                  <p>Course syllabus, drafting plate standards, and architectural design guidelines.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge">CET 134</span>
+                    <span class="school-tag">MSU-IIT</span>
+                  </div>
+                  <h3>Formworks and Scaffoldings</h3>
+                  <p>Formwork design, scaffolding systems, construction safety standards, and laboratory materials.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge">CET 154</span>
+                    <span class="school-tag">MSU-IIT</span>
+                  </div>
+                  <h3>Reinforced Concrete Works</h3>
+                  <p>Concrete principles, reinforcement detailing, member construction, and field standards.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge">BET 117</span>
+                    <span class="school-tag">MSU-IIT</span>
+                  </div>
+                  <h3>Technology Awareness</h3>
+                  <p>Lecture modules, emerging technologies, and class project resources.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge">ENS 150.2</span>
+                    <span class="school-tag">MSU-IIT</span>
+                  </div>
+                  <h3>Engineering Graphics</h3>
+                  <p>Orthographic projection, technical visualization, CAD fundamentals, and drafting exercises.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+            </div>
+          </section>
+
+          <section id="section-spc" class="school-section">
+            <h2 class="school-header">
+              <span class="school-dot dot-spc"></span>
+              St. Peter's College Courses
+            </h2>
+
+            <div class="course-grid">
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">BES 1.2</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Engineering Drawing and Plans</h3>
+                  <p>Technical drawing conventions, blueprint reading, building plans, and drafting standards.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">BES 3</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Statics of Rigid Bodies</h3>
+                  <p>Force systems, equilibrium, trusses, centroids, and engineering mechanics problem sets.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">EM 1</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Calculus 1</h3>
+                  <p>Limits, continuity, derivatives, optimization, and differential calculus applications.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">EM 2</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Calculus 2</h3>
+                  <p>Integration techniques, definite integrals, plane areas, volumes, and infinite series.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">EM 3</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Engineering Data Analysis</h3>
+                  <p>Probability distributions, inference, hypothesis testing, and regression modeling.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+
+              <article class="course-card">
+                <div>
+                  <div class="badge-row">
+                    <span class="badge badge-spc">EM 4</span>
+                    <span class="school-tag">SPC</span>
+                  </div>
+                  <h3>Differential Equations</h3>
+                  <p>First- and higher-order differential equations, Laplace transforms, and engineering applications.</p>
+                </div>
+                <a class="btn btn-primary" href="https://drive.google.com" target="_blank" rel="noopener noreferrer">Open Course Folder</a>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <div id="instructor" class="tab-content">
+          <div class="profile-grid">
+            <article class="profile-card">
+              <span class="section-kicker">INSTRUCTOR PROFILE</span>
+              <h2>Rey Arth B. Rublico</h2>
+
+              <h3>Academic Appointments</h3>
+              <ul>
+                <li><strong>Lecturer</strong> – Department of Civil Engineering Technology, MSU-IIT</li>
+                <li><strong>Part-Time Instructor</strong> – Civil Engineering Department, St. Peter's College</li>
+              </ul>
+
+              <h3>Education</h3>
+              <ul>
+                <li><strong>M.S. in Sustainable Development Studies</strong> (Major in Environmental Engineering), ongoing</li>
+                <li><strong>B.E.T. in Civil Engineering Technology</strong>, MSU-IIT</li>
+              </ul>
+            </article>
+
+            <article class="profile-card">
+              <span class="section-kicker">ACADEMIC CONTACT</span>
+              <h2>Student inquiries</h2>
+              <p>
+                For coursework, plate reviews, project questions, and academic consultations,
+                include your course code and section in the email subject.
+              </p>
+
+              <p><strong>Email:</strong><br />reyarth.rublico@g.msuiit.edu.ph</p>
+
+              <a class="btn btn-primary" href="mailto:reyarth.rublico@g.msuiit.edu.ph">
+                Email the Instructor
+              </a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">A²</span>
+          <span class="brand-copy">
+            <strong>ARTHREYSQUARED</strong>
+            <small>GROUP</small>
+          </span>
+        </a>
+        <p>Student Learning Hub</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="index.html">Company Home</a>
+        <a href="#courses">Courses</a>
+        <a href="#instructor">Instructor</a>
+      </div>
+
+      <div class="footer-meta">
+        <span>© <span id="currentYear"></span> ARTHREYSQUARED Group.</span>
+        <span>All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
