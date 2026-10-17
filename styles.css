@@ -1206,3 +1206,47 @@ p, h1, h2, h3, a { overflow-wrap: break-word; }
 }
 
 .check-list { padding-left: 20px; color: #334155; font-weight: 600; }
+
+/* Community groups and personal profile links. */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block: 22px;
+}
+
+.social-links .btn {
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.social-link-note {
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.community-groups {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.community-groups > h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.community-intro {
+  margin: 0 0 24px;
+  color: var(--text);
+}
+
+.community-groups .service-card {
+  min-height: 260px;
+}
+
+.community-groups h4 {
+  margin: 16px 0 10px;
+  font-size: 21px;
+  line-height: 1.3;
+}
