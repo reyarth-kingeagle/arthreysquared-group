@@ -12,21 +12,22 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true">A²</span>
+        <img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" class="brand-logo" width="836" height="835" />
         <span class="brand-copy">
           <strong>ARTHREYSQUARED</strong>
           <small>GROUP</small>
         </span>
       </a>
 
-      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-controls="mainNav" aria-label="Open navigation" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
 
-      <nav class="main-nav" id="mainNav">
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
         <a href="index.html">Company Home</a>
         <a href="#courses">Courses</a>
         <a href="#instructor">Instructor</a>
@@ -35,7 +36,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content" tabindex="-1">
     <section class="course-hero">
       <div class="container">
         <span class="section-kicker">ARTHREYSQUARED LEARNING HUB</span>
@@ -50,15 +51,15 @@
     <section class="course-shell">
       <div class="container">
         <div class="tabs">
-          <button class="tab-btn active" onclick="openTab(event, 'courses')">Courses & Handouts</button>
-          <button class="tab-btn" onclick="openTab(event, 'instructor')">Instructor & Contact</button>
+          <button class="tab-btn active" type="button" data-panel="courses" aria-controls="courses" aria-pressed="true">Courses & Handouts</button>
+          <button class="tab-btn" type="button" data-panel="instructor" aria-controls="instructor" aria-pressed="false">Instructor & Contact</button>
         </div>
 
         <div id="courses" class="tab-content active">
           <div class="filter-bar">
-            <button class="filter-btn active" onclick="filterSchool(event, 'all')">All Subjects (11)</button>
-            <button class="filter-btn" onclick="filterSchool(event, 'msuiit')">MSU-IIT (5)</button>
-            <button class="filter-btn" onclick="filterSchool(event, 'spc')">St. Peter's College (6)</button>
+            <button class="filter-btn active" type="button" data-school="all" aria-pressed="true">All Subjects (11)</button>
+            <button class="filter-btn" type="button" data-school="msuiit" aria-pressed="false">MSU-IIT (5)</button>
+            <button class="filter-btn" type="button" data-school="spc" aria-pressed="false">St. Peter's College (6)</button>
           </div>
 
           <!-- EDIT: Replace each Google Drive URL with the actual folder for that subject. -->
@@ -256,7 +257,7 @@
     <div class="container footer-grid">
       <div>
         <a class="brand footer-brand" href="index.html">
-          <span class="brand-mark" aria-hidden="true">A²</span>
+          <img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" class="brand-logo" width="836" height="835" />
           <span class="brand-copy">
             <strong>ARTHREYSQUARED</strong>
             <small>GROUP</small>
@@ -272,12 +273,12 @@
       </div>
 
       <div class="footer-meta">
-        <span>© <span id="currentYear"></span> ARTHREYSQUARED Group.</span>
+        <span>© <span id="currentYear">2026</span> ARTHREYSQUARED Group.</span>
         <span>All rights reserved.</span>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

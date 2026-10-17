@@ -33,7 +33,7 @@ Open `coursework.html` and replace each:
 with the correct course folder link.
 
 ### 3. Logo
-The starter uses a CSS `A²` brand mark.
+The starter uses a CSS `R3²` brand mark.
 
 When your final logo is ready, put it in:
 

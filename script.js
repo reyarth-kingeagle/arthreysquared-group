@@ -1,60 +1,84 @@
-// Mobile navigation
+// Progressive navigation: links remain available if JavaScript is disabled.
 const menuToggle = document.getElementById("menuToggle");
 const mainNav = document.getElementById("mainNav");
 
 if (menuToggle && mainNav) {
+  const mobile = window.matchMedia("(max-width: 1000px)");
+  const setMenu = (open, returnFocus = false) => {
+    mainNav.classList.toggle("open", open);
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    if (returnFocus) menuToggle.focus();
+  };
   menuToggle.addEventListener("click", () => {
-    const isOpen = mainNav.classList.toggle("open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    setMenu(menuToggle.getAttribute("aria-expanded") !== "true");
   });
+  mainNav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && mainNav.classList.contains("open")) setMenu(false, true);
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".nav-wrap")) setMenu(false);
+  });
+  document.addEventListener("focusin", (event) => {
+    if (!event.target.closest(".nav-wrap")) setMenu(false);
+  });
+  mobile.addEventListener("change", () => setMenu(false));
+  document.body.classList.add("nav-ready");
+}
 
-  mainNav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mainNav.classList.remove("open");
-      menuToggle.setAttribute("aria-expanded", "false");
+const currentYear = document.getElementById("currentYear");
+if (currentYear) currentYear.textContent = new Date().getFullYear();
+
+// Portal panels use native buttons; links and browser history select the same panel.
+const panelButtons = [...document.querySelectorAll("[data-panel]")];
+if (panelButtons.length) {
+  const showPanel = (id) => {
+    if (!panelButtons.some((button) => button.dataset.panel === id)) return;
+    document.querySelectorAll(".tab-content").forEach((panel) => {
+      panel.classList.toggle("active", panel.id === id);
+    });
+    panelButtons.forEach((button) => {
+      const active = button.dataset.panel === id;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  };
+  const syncHash = () => {
+    const id = location.hash.slice(1);
+    showPanel(id === "instructor" ? "instructor" : "courses");
+  };
+  panelButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      showPanel(button.dataset.panel);
+      history.pushState(null, "", "#" + button.dataset.panel);
     });
   });
-}
-
-// Automatic copyright year
-const currentYear = document.getElementById("currentYear");
-if (currentYear) {
-  currentYear.textContent = new Date().getFullYear();
-}
-
-// Coursework tabs
-function openTab(evt, tabName) {
-  document.querySelectorAll(".tab-content").forEach((item) => {
-    item.classList.remove("active");
+  document.querySelectorAll('a[href="#courses"], a[href="#instructor"]').forEach((link) => {
+    link.addEventListener("click", () => showPanel(link.hash.slice(1)));
   });
-
-  document.querySelectorAll(".tab-btn").forEach((button) => {
-    button.classList.remove("active");
-  });
-
-  const target = document.getElementById(tabName);
-  if (target) target.classList.add("active");
-
-  if (evt?.currentTarget) {
-    evt.currentTarget.classList.add("active");
+  window.addEventListener("hashchange", syncHash);
+  window.addEventListener("popstate", syncHash);
+  syncHash();
+  document.body.classList.add("portal-ready");
+  if (location.hash === "#instructor" || location.hash === "#courses") {
+    requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
   }
 }
 
-// Institution filters
-function filterSchool(evt, school) {
-  document.querySelectorAll(".filter-btn").forEach((button) => {
-    button.classList.remove("active");
+const filterButtons = [...document.querySelectorAll("[data-school]")];
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    filterButtons.forEach((filter) => {
+      const active = filter === button;
+      filter.classList.toggle("active", active);
+      filter.setAttribute("aria-pressed", String(active));
+    });
+    ["msuiit", "spc"].forEach((school) => {
+      const section = document.getElementById("section-" + school);
+      if (section) section.hidden = button.dataset.school !== "all" && button.dataset.school !== school;
+    });
   });
-
-  if (evt?.currentTarget) {
-    evt.currentTarget.classList.add("active");
-  }
-
-  const msuiit = document.getElementById("section-msuiit");
-  const spc = document.getElementById("section-spc");
-
-  if (!msuiit || !spc) return;
-
-  msuiit.style.display = school === "all" || school === "msuiit" ? "block" : "none";
-  spc.style.display = school === "all" || school === "spc" ? "block" : "none";
-}
+});
