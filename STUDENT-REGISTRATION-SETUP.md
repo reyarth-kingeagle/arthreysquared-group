@@ -140,5 +140,6 @@ These are model/static checks, not a verified live Google Form or multi-user aut
 - If Score Ledger contains a duplicate Student UID + Assessment ID, unknown UID, blank scores or earned points higher than maximum, the grade identity rebuild rejects invalid evidence.
 - If the Form is closed, setup intentionally disables responses until the instructor verifies Google Forms email settings.
 - If names or scores do not match, check UID, not row positions, and run refreshAllCET154Views as instructor after repairing the data.
+- If a trigger was interrupted between writing the section roster and the central registry, first inspect the affected student UID and IDs, then run reconcileCET154Registrations as the script owner. It repairs only consistent, nonconflicting registry/section links and refuses conflicting IDs. Never rerun unverified/duplicate form responses to force a merge.
 - Do not rename/remove section Sheets without updating Script Properties and transfer procedures.
 - This milestone DOES NOT provide website passcode login, approved enrollment workflows, automatic student grade/CO computation, secure Moodle-like quiz access, or PDF reports. Those come after the registration pilot succeeds.
