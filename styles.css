@@ -1259,3 +1259,43 @@ p, h1, h2, h3, a { overflow-wrap: break-word; }
   font-size: 21px;
   line-height: 1.3;
 }
+
+/* Optional account and assessment pages share the site design tokens. */
+[hidden] { display: none !important; }
+.subject-wrap { width: min(calc(100% - 40px), var(--container)); margin-inline: auto; }
+.subject-header-inner { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.subject-navigation, .account-bar, .action-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.subject-navigation a { min-height: 44px; display: inline-flex; align-items: center; font-weight: 700; }
+.subject-main { padding-block: 36px 72px; }
+.subject-banner { margin-block: 24px; }
+.subject-banner h1 { margin-block: 8px; font-size: clamp(32px, 5vw, 52px); line-height: 1.1; }
+.subject-material-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; margin-block: 24px; }
+.subject-section { scroll-margin-top: calc(var(--header-height) + 16px); }
+.account-layout { width: min(calc(100% - 40px), 720px); margin: 36px auto 80px; }
+.account-layout > h1 { font-size: clamp(32px, 5vw, 48px); }
+.account-layout > .profile-card { margin-block: 18px; }
+.account-bar { margin-block: 16px; }
+.status-message { min-height: 1.5em; overflow-wrap: anywhere; }
+.error-message { color: #9b1c1c; font-weight: 700; }
+.form-stack { display: grid; gap: 16px; }
+.form-stack label { display: grid; gap: 6px; font-weight: 700; }
+.form-stack :is(input, select, textarea) { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; color: var(--ink); border: 1px solid #94a3b8; border-radius: 8px; background: var(--white); }
+.form-stack textarea { resize: vertical; }
+.button-link { padding: 0; border: 0; background: transparent; color: var(--blue); text-decoration: underline; cursor: pointer; }
+.profile-photo { object-fit: cover; }
+.homepage .founder-mark.profile-photo { width: min(220px, 100%); max-width: 220px; height: auto; aspect-ratio: 1; border: 3px solid var(--gold); border-radius: 24px; box-shadow: var(--shadow-sm); }
+.assessment-card, .result-card, .quiz-question { min-width: 0; margin-block: 16px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-sm); }
+.quiz-question legend { max-width: 100%; padding-inline: 6px; font-size: 18px; font-weight: 800; overflow-wrap: anywhere; }
+.choice { min-height: 44px; display: flex !important; grid-template-columns: auto 1fr; align-items: flex-start; gap: 10px !important; margin-block: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.choice input { width: 20px; min-height: 20px; margin-top: 3px; flex: 0 0 auto; accent-color: var(--teal); }
+.question-status { font-weight: 700; }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+.table-scroll:focus-visible { outline: 3px solid #a77c1b; outline-offset: 3px; }
+.table-scroll table { width: 100%; border-collapse: collapse; }
+.table-scroll th, .table-scroll td { padding: 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.table-scroll caption { margin-bottom: 10px; text-align: left; font-weight: 800; }
+[data-enrollments], [data-results] { overflow-wrap: anywhere; }
+@media (max-width: 620px) {
+  .subject-wrap, .account-layout { width: min(calc(100% - 28px), var(--container)); }
+  .subject-header-inner { align-items: flex-start; flex-direction: column; padding-block: 12px; }
+}

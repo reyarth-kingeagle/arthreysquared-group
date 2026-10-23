@@ -32,12 +32,18 @@ async function loadSubject() {
     for (const assessment of data) {
       const card = el('article', undefined, 'assessment-card');
       card.append(el('h3', assessment.title), el('p', assessment.instructions || 'Instructions will appear before you begin.'), el('p', assessment.access_type === 'class' ? 'Class test · approved enrollment required' : 'Practice quiz · sign-in required'));
-      card.append(el('p', `Opens: ${dateText(assessment.opens_at)} · Closes: ${dateText(assessment.closes_at)}`));
+      const availability = `Opens: ${dateText(assessment.opens_at)} · Closes: ${dateText(assessment.closes_at)}`;
+      const limits = [
+        assessment.max_attempts ? `Maximum attempts: ${assessment.max_attempts}` : 'No configured attempt limit',
+        assessment.time_limit_minutes ? `Time limit: ${assessment.time_limit_minutes} minutes` : null
+      ].filter(Boolean).join(' · ');
+      card.append(el('p', availability), el('p', limits));
       const link = el('a', assessment.access_type === 'class' ? 'Start Test' : 'Start Quiz', 'btn btn-primary');
       link.href = siteUrl(`quiz.html?id=${assessment.id}`); card.append(link); list.append(card);
     }
     const enroll = document.querySelector('[data-enroll]');
-    enroll.hidden = false;
+    if (enroll) enroll.hidden = false;
+    if (!enroll) return;
     enroll.onclick = async () => {
       enroll.disabled = true;
       try {

@@ -1,24 +1,13 @@
 import { config } from './config.js';
+import { safeReturn as validateReturn, assessmentIdPattern } from './return-url.js';
 
 export const base = new URL('../', import.meta.url);
-export const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export const uuid = assessmentIdPattern;
 export const siteUrl = (path) => new URL(path, base).href;
 
 // A small destination allowlist, not a generic same-origin redirect.
 export function safeReturn(value) {
-  const fallback = siteUrl('coursework.html');
-  if (typeof value !== 'string' || !value || /[\\\s\u0000-\u001f]/.test(value)) return fallback;
-  try {
-    const url = new URL(value, base);
-    if (url.origin !== base.origin || url.username || url.password || url.hash) return fallback;
-    if (!url.pathname.startsWith(base.pathname)) return fallback;
-    const path = url.pathname.slice(base.pathname.length);
-    if (['coursework.html', 'results.html'].includes(path) && !url.search) return url.href;
-    if (path !== 'quiz.html') return fallback;
-    const entries = [...url.searchParams];
-    if (entries.length !== 1 || !['id', 'attempt'].includes(entries[0][0]) || !uuid.test(entries[0][1])) return fallback;
-    return url.href;
-  } catch { return fallback; }
+  return validateReturn(value, base);
 }
 
 export function authUrl(mode = 'signin', destination = location.href, quiz = false) {

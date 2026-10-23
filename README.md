@@ -1,6 +1,6 @@
-# ARTHREYSQUARED Group Starter Website
+# ARTHREYSQUARED Group Website
 
-This starter project separates the company homepage from the student coursework portal.
+ARTHREYSQUARED Group is a static GitHub Pages website with a public Student Portal and optional Supabase-powered student accounts and protected assessments. Public lessons and resources remain available without an account.
 
 ## Files
 
@@ -8,6 +8,10 @@ This starter project separates the company homepage from the student coursework 
 - `coursework.html` — student courseworks and instructor portal
 - `styles.css` — all colors, layout, typography, and responsive rules
 - `script.js` — mobile menu, tabs, course filters, automatic footer year
+- `Coursework/` — existing subject pages organized by institution
+- `js/` — Supabase browser client and optional account, quiz, results, instructor flows
+- `supabase/migrations/` — database schema, policies, and server-side assessment functions
+- `SETUP.md` — beginner-friendly Supabase, authentication, instructor, local test, and deployment setup
 
 ## Quick start in VS Code
 
@@ -15,6 +19,10 @@ This starter project separates the company homepage from the student coursework 
 2. Install the **Live Server** extension if you do not already have it.
 3. Right-click `index.html`.
 4. Choose **Open with Live Server**.
+
+## Optional accounts and quizzes
+
+Follow [SETUP.md](./SETUP.md) to create the Supabase project and run the database migration. Put only your project's URL and public publishable key in `js/config.js`. Do not add a service-role/secret key or database password to browser code. Without backend configuration, the public website stays usable and accounts/quizzes are reported as unavailable.
 
 ## Important edits
 
@@ -25,35 +33,11 @@ Search for:
 
 Replace it with your actual company email after you create one.
 
-### 2. Google Drive folders
-Open `coursework.html` and replace each:
+### 2. Logo and profile image
 
-`https://drive.google.com`
+The existing logo at `assets/logo.png` is already used across the homepage, portal, and subject pages. The supplied `assets/rey-arth-rublico.jpg` is used on the homepage and instructor profile.
 
-with the correct course folder link.
-
-### 3. Logo
-The starter uses a CSS `R3²` brand mark.
-
-When your final logo is ready, put it in:
-
-`assets/logo.png`
-
-Then replace:
-
-```html
-<span class="brand-mark" aria-hidden="true">A²</span>
-```
-
-with:
-
-```html
-<img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" class="brand-logo">
-```
-
-Do the same in both `index.html` and `coursework.html`.
-
-### 4. Brand colors
+### 3. Brand colors
 Edit the variables near the top of `styles.css`:
 
 ```css
@@ -65,7 +49,7 @@ Edit the variables near the top of `styles.css`:
 }
 ```
 
-### 5. Product/reviewer cards
+### 4. Product/reviewer cards
 In `index.html`, edit the section with ID:
 
 `review-materials`
