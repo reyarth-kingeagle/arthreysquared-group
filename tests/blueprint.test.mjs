@@ -5,8 +5,10 @@ test('CET154 has exact approved category distribution and mapped Module 1 exampl
   const s=sampleBlueprint();
   assert.equal(Object.values(s.categoryWeights).reduce((a,b)=>a+b,0),100);
   assert.deepEqual(s.modules[0].ilos.map(i=>i.id),['ILO1','ILO2','ILO3']);
-  assert.equal(mappingRows(s).length,3);
-  assert.equal(blueprintRows(s).length,4);
+  assert.equal(mappingRows(s).length,17);
+  assert.equal(s.modules.length,5);
+  assert.equal(s.assessments.length,25);
+  assert.equal(blueprintRows(s).length,39);
   assert.ok(!validateBlueprint(s).some(i=>i.severity==='error'));
   assert.ok(validateBlueprint(s).some(i=>i.message.includes('maximum possible score')));
 });
