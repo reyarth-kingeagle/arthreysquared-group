@@ -18,12 +18,12 @@ The Google Forms owner must be the instructor's authorized Google account. Stude
 ## Current Google Drive resources
 
 **INSTRUCTOR-ONLY** CET154 folder (independent of the original publicly editable shared folder):
-https://drive.google.com/drive/folders/19iIgHAAcCOCTaD2mvZjm4VW56n4aOUws
+[Private CET154 folder — copy its ID from Google Drive (not the public resources folder)]
 
 Native Google Sheets MASTER (TEST ONLY):
-https://docs.google.com/spreadsheets/d/10VgXnMyEJM_HbApjB5wKsslB44zSkeVXwUjRyQKTKGI/edit
+[Private CET154 MASTER Google Sheet — copy its ID from Google Sheets]
 
-The MASTER was moved from the original shared folder and its Google Drive permissions were rechecked: only the owner account currently has access. The MASTER has the tabs: Student Dataset, Grading System, Score Ledger, CO Evidence, CO Attainment, Assessment Blueprint, Settings, Registration Audit. It contains no real students. The script creates independent copies per section, so the MASTER remains a blank template.
+The MASTER was moved from the original shared folder and its Google Drive permissions were rechecked: only the owner account currently has access. **Do not put private Drive resource IDs or student records in public GitHub.** The MASTER has the tabs: Student Dataset, Grading System, Score Ledger, CO Evidence, CO Attainment, Assessment Blueprint, Settings, Registration Audit. It contains no real students. The script creates independent copies per section, so the MASTER remains a blank template.
 
 ## Step 1 — Update VS Code files after the GitHub changes
 
@@ -56,8 +56,8 @@ Write down the actual official section names, exactly. Section A and Section B b
 6. Open Project Settings (gear icon) > Script properties > Add script property.
 7. Add these exactly:
 
-    COURSE_FOLDER_ID = 19iIgHAAcCOCTaD2mvZjm4VW56n4aOUws
-    MASTER_SPREADSHEET_ID = 10VgXnMyEJM_HbApjB5wKsslB44zSkeVXwUjRyQKTKGI
+    COURSE_FOLDER_ID = PASTE_PRIVATE_CET154_FOLDER_ID
+    MASTER_SPREADSHEET_ID = PASTE_PRIVATE_MASTER_SPREADSHEET_ID
     SECTIONS_JSON = ["Section A","Section B"]
 
 Replace the example sections with your ACTUAL section names. JSON must include double quotes and square brackets.
