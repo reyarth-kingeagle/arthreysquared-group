@@ -4,6 +4,10 @@ import {sampleBlueprint,emptyBlueprint,validateBlueprint,blueprintRows,mappingRo
 test('CET154 has exact approved category distribution and mapped Module 1 example',()=>{
   const s=sampleBlueprint();
   assert.equal(Object.values(s.categoryWeights).reduce((a,b)=>a+b,0),100);
+  assert.equal(s.course.passingScore,65);
+  assert.equal(s.course.coThreshold,65);
+  assert.ok(!validateBlueprint(s).some(i=>i.message.includes('threshold has not')));
+  assert.ok(!validateBlueprint(s).some(i=>i.message.includes('passing threshold requires')));
   assert.deepEqual(s.modules[0].ilos.map(i=>i.id),['ILO1','ILO2','ILO3']);
   assert.equal(mappingRows(s).length,17);
   assert.equal(s.modules.length,5);
