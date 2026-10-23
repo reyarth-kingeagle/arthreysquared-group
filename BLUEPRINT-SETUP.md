@@ -13,7 +13,7 @@ This is a **local-only draft editor**, not a production admin service. The page 
 - Validate uniqueness, references, weights, thresholds and incomplete mappings.
 - Download JSON drafts and spreadsheet-compatible ILO–CO and assessment mapping CSVs.
 - Import previously exported version-1 JSON drafts (1 MB maximum).
-- Example from CET154: Module 1, ILO1–ILO3, QILO1–QILO3 and L1, mapped to CO1.
+- CET154 syllabus example: five modules, ILO1–ILO15, QILO1–QILO14, L1–L7, E1–E3, and R1. The ILO15 integrated case study covers CO1, CO2 and CO3.
 - Display **unresolved** syllabus approval questions rather than invent passing and CO-attainment thresholds.
 
 ## Workflow
