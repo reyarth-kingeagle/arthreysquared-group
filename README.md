@@ -14,7 +14,9 @@ A static GitHub Pages educational website for the ARTHREYSQUARED Learning Hub, t
 - `course-builder.html`, `course-builder.css` — OBE-CQI course blueprint draft editor.
 - `js/course-builder.js`, `js/blueprint-model.mjs` — editable modules, ILO/CO mapping, assessment allocation, and validation.
 - `BLUEPRINT-SETUP.md` — blueprint editor usage, current limits, and future integration notes.
-- `tests/` — static route/reference checks and blueprint model tests.
+- `tests/` — static route/reference checks, blueprint model tests, and CET154 enrollment/UID integrity tests.
+- `apps-script/CET154-REGISTRATION.gs` — instructor-owned Google Forms submission automation to create private section copies and alphabetically sorted rosters.
+- `STUDENT-REGISTRATION-SETUP.md` — step-by-step instructor configuration for institutional Google Forms registration and Google Sheets.
 
 ## Start in VS Code
 
@@ -27,12 +29,13 @@ A static GitHub Pages educational website for the ARTHREYSQUARED Learning Hub, t
 
 Public coursework remains available with no sign-in. The OBE-CQI blueprint editor runs entirely in your browser, saves local drafts, and exports JSON and CSV blueprints. It is **not an authenticated instructor portal**. Do not put private syllabi, student identities, grades, passwords, or answer keys in the editor.
 
-Accounts, enrollments, protected quizzes, automated scoring, Google Drive folder generation, Google Sheets section class records, and PDF CO-attainment reports are **not implemented**. They are future milestones requiring an authenticated backend and approved academic rules. No Supabase integration or SMTP setup is needed for the current static site.
+A CET154 **registration pilot** is prepared but **not yet activated**: an owner-installed Google Forms submit trigger can create private section Google Sheets and insert institutionally verified applicants, sorted as complete rows. A stable Student UID links score evidence to the correct learner. The draft also includes a native Google Sheets MASTER with no student data. This is **not yet a website student account system**, automated official grading/CO attainment engine, approved enrollment management, protected quiz backend, or PDF reporting system. Set up Forms verification and complete real-world security tests before real student enrollment. No Supabase integration or SMTP setup is needed for the current static site.
 
 ## Development checks
 
 - Static links and existing subject pages: `./tests/check-site.ps1` in Windows PowerShell.
 - Blueprint model tests (requires Node.js): `node --test tests/blueprint.test.mjs`.
+- Student roster/UID integrity tests: `node --test tests/student-registration.test.mjs`.
 
 ## Publishing
 
