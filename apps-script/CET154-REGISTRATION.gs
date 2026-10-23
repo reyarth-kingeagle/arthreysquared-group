@@ -158,7 +158,12 @@ function sortEntireRoster_(sheet) {
 }
 function refreshGradingIdentity_(ss) {
   const roster=rows_(ss.getSheetByName(CET154.dataset),9);
-  const ledger=rows_(ss.getSheetByName(CET154.scoreLedger),7);
+  const ledgerSheet=ss.getSheetByName(CET154.scoreLedger);
+  const ledgerSize=ledgerSheet.getLastRow()-1;
+  // Do not silently discard malformed evidence rows with blank UIDs.
+  const ledger=ledgerSize>0?ledgerSheet.getRange(2,1,ledgerSize,7).getValues()
+    .filter(row=>row.some(value=>value!==''&&value!==null)):[];
+
   const uidSet=new Set(roster.map(r=>String(r[0])));
   const count=new Map(),earned=new Map(),pairs=new Set();
   for(const row of ledger) {
@@ -250,4 +255,56 @@ function showCET154Links() {
   const f=c.p.getProperty('REGISTRATION_FORM_ID');
   Logger.log('Registration form: '+(f?FormApp.openById(f).getEditUrl():'Not set'));
   for(const [section,id] of Object.entries(ids))Logger.log(section+': https://docs.google.com/spreadsheets/d/'+id+'/edit');
+}
+
+
+/**
+ * Owner-only repair for a Form trigger interrupted between a section write and
+ * the central registry write. It will NOT merge conflicting student identities.
+ * Run after inspecting Apps Script execution errors; keep student data private.
+ */
+function reconcileCET154Registrations() {
+  const lock=LockService.getScriptLock();lock.waitLock(30000);
+  try {
+    const c=configuration_(),map=JSON.parse(c.p.getProperty('SECTION_SHEET_IDS')||'{}');
+    const registry=registry_(c).getSheetByName('Students');
+    const known=rows_(registry,REGISTRY_HEADERS.length);
+    const byUid=new Map(known.map(r=>[String(r[0]),r]));
+    const byEmail=new Map(known.map(r=>[String(r[2]).toLowerCase(),r]));
+    const byId=new Map(known.map(r=>[String(r[1]).toLowerCase(),r]));
+    for(const section of c.sections){
+      const sheetId=map[section];if(!sheetId)continue;
+      const ss=assertMaster_(sheetId);
+      const roster=rows_(ss.getSheetByName(CET154.dataset),9);
+      for(const row of roster){
+        const uid=String(row[0]),email=String(row[5]).toLowerCase(),id=String(row[1]).toLowerCase();
+        const registryRecord=byUid.get(uid);
+        if(registryRecord){
+          if(String(registryRecord[7])!==sheetId||String(registryRecord[1]).toLowerCase()!==id||
+            String(registryRecord[2]).toLowerCase()!==email){
+            throw new Error('Registry conflict for UID: '+uid+' — requires instructor review.');
+          }
+          continue;
+        }
+        if(byEmail.has(email)||byId.has(id))throw new Error('Cannot reconcile conflicting student ID/email: '+id);
+        const regRow=[uid,row[1],row[5],row[2],row[3],row[4],section,sheetId,row[7],row[8]];
+        registry.appendRow(regRow);
+        byUid.set(uid,regRow);byEmail.set(email,regRow);byId.set(id,regRow);
+        audit_(c,'RECOVERED REGISTRY ROW',email,id,section,'Copied immutable UID from original section roster.');
+      }
+      // Do not insert a registry student into the wrong section or overwrite grades.
+      const uidInRoster=new Set(roster.map(row=>String(row[0])));
+      for(const regRow of known){
+        if(regRow[7]!==sheetId||uidInRoster.has(String(regRow[0])))continue;
+        const row=[regRow[0],regRow[1],regRow[3],regRow[4],regRow[5],
+          regRow[2],regRow[6],regRow[8],regRow[9]];
+        ss.getSheetByName(CET154.dataset).appendRow(row);
+        uidInRoster.add(String(regRow[0]));
+        audit_(c,'RECOVERED SECTION ROW',regRow[2],regRow[1],section,'Copied existing UID from registry into its verified section.');
+      }
+      sortEntireRoster_(ss.getSheetByName(CET154.dataset));
+      refreshGradingIdentity_(ss);
+    }
+    SpreadsheetApp.flush();
+  }finally{lock.releaseLock();}
 }
