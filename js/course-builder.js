@@ -45,7 +45,10 @@ function moduleEditor(){
   state.modules.forEach((m,idx)=>{
     const wrap=node('div','builder-record'),heading=node('div','builder-panel-heading');
     heading.append(node('h3','',m.id+' · '+m.title),action('Remove module',()=>confirmRemove(m.id,()=>{
-      state.assessments=state.assessments.filter(a=>a.moduleId!==m.id);state.modules.splice(idx,1);
+      state.assessments=state.assessments.filter(a=>a.moduleId!==m.id);
+      const removed=new Set(m.ilos.map(i=>i.id));
+      state.assessments.forEach(a=>a.allocations=a.allocations.filter(x=>!removed.has(x.iloId)));
+      state.modules.splice(idx,1);
     })));wrap.append(heading);
     const grid=node('div','builder-grid');
     grid.append(field('Module ID',m.id,v=>apply(()=>{const old=m.id;m.id=v;state.assessments.forEach(a=>{if(a.moduleId===old)a.moduleId=v})})),
@@ -93,14 +96,19 @@ function assessments(){
     card.append(grid);
     const allocHeader=node('div','builder-panel-heading');
     allocHeader.append(node('h4','','ILO point allocations'),action('+ Link ILO',()=>apply(()=>{
-      const m=state.modules.find(m=>m.id===a.moduleId);
-      const unused=m?.ilos.find(i=>!a.allocations.some(x=>x.iloId===i.id));
+      const eligible=['examinations','capstone'].includes(a.category)
+        ? state.modules.flatMap(m=>m.ilos)
+        : (state.modules.find(m=>m.id===a.moduleId)?.ilos||[]);
+      const unused=eligible.find(i=>!a.allocations.some(x=>x.iloId===i.id));
       if(unused)a.allocations.push({iloId:unused.id,points:null});
     })));card.append(allocHeader);
     const module=state.modules.find(m=>m.id===a.moduleId);
+    const eligibleIlos=['examinations','capstone'].includes(a.category)
+      ? state.modules.flatMap(m=>m.ilos)
+      : (module?.ilos||[]);
     for(const [j,alloc] of a.allocations.entries()){
       const line=node('div','builder-allocation');
-      line.append(field('ILO',alloc.iloId,v=>apply(()=>{alloc.iloId=v}),'select',{options:Object.fromEntries((module?.ilos||[]).map(i=>[i.id,i.id]))}),
+      line.append(field('ILO',alloc.iloId,v=>apply(()=>{alloc.iloId=v}),'select',{options:Object.fromEntries(eligibleIlos.map(i=>[i.id,i.id]))}),
         field('Allocated points',alloc.points,v=>apply(()=>{alloc.points=v}),'number',{min:0}),
         action('Remove link',()=>apply(()=>a.allocations.splice(j,1))));
       card.append(line);
