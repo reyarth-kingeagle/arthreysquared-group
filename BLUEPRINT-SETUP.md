@@ -14,7 +14,7 @@ This is a **local-only draft editor**, not a production admin service. The page 
 - Download JSON drafts and spreadsheet-compatible ILO–CO and assessment mapping CSVs.
 - Import previously exported version-1 JSON drafts (1 MB maximum).
 - CET154 syllabus example: five modules, ILO1–ILO15, QILO1–QILO14, L1–L7, E1–E3, and R1. The ILO15 integrated case study covers CO1, CO2 and CO3.
-- Display **unresolved** syllabus approval questions rather than invent passing and CO-attainment thresholds.
+- CET154 sample uses **65% course passing = 3.0** and **65% individual CO attainment**, as confirmed by the instructor. This does not set a separate class-level CO attainment-rate benchmark. Other course thresholds remain editable, not assumed.
 
 ## Workflow
 
