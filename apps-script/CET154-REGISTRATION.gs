@@ -38,6 +38,18 @@ function configuration_() {
     throw new Error('Configure COURSE_FOLDER_ID, MASTER_SPREADSHEET_ID and unique SECTIONS_JSON first.');
   }
   if(sections.length>10)throw new Error('Pilot supports at most 10 sections; review scale and trigger quotas before expanding.');
+  // Fail closed if someone accidentally points the script at a link-shared
+  // folder or MASTER. Students must never be able to edit a class record.
+  const targetFolder=DriveApp.getFolderById(folder);
+  if(targetFolder.getSharingAccess()!==DriveApp.Access.PRIVATE ||
+     DriveApp.getFileById(master).getSharingAccess()!==DriveApp.Access.PRIVATE)
+    throw new Error('CET154 folder and MASTER must both be Restricted/private. Do not use the publicly editable Drive folder.');
+  const parents=targetFolder.getParents();
+  while(parents.hasNext()) {
+    if(parents.next().getSharingAccess()!==DriveApp.Access.PRIVATE)
+      throw new Error('A parent folder grants public/domain access. Move the student records to a separate private folder.');
+  }
+
   return {p,folder,master,sections:sections.map(s=>s.trim())};
 }
 function assertMaster_(id) {
