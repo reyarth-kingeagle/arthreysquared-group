@@ -26,6 +26,6 @@ This is a **local-only draft editor**, not a production admin service. The page 
 6. Check **Blueprint review** for blocking errors and missing information.
 7. Download JSON to retain the complete editable draft, plus CSV mappings if desired.
 
-This milestone **does not** parse uploaded .docx syllabi, generate Google Sheets or Drive folders, register students, grade quizzes, print PDF reports, or replace existing Supabase assessment pages. Those require a separate authenticated backend and approved grading/CO-attainment rules. The developer must also design secure server-side validation and record ownership before connecting to real student records.
+This milestone **does not** parse uploaded .docx syllabi, generate Google Sheets or Drive folders, register students, grade quizzes, print PDF reports, or replace an existing live assessment system. Those require a separate authenticated backend and approved grading/CO-attainment rules. The developer must also design secure server-side validation and record ownership before connecting to real student records.
 
 Tests: `node --test tests/blueprint.test.mjs`. These are model tests, not end-to-end browser/security tests.
