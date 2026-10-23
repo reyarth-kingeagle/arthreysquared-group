@@ -9,36 +9,83 @@ const CATEGORY_WEIGHTS = Object.freeze({ examinations:50, laboratory:35, capston
 export const SCHEMA_VERSION = 1;
 
 export function sampleBlueprint() {
+  // A syllabus-grounded pilot, not approved operational marks or class sections.
+  const modules = [
+    {id:'M1',title:'Fundamentals of Concrete Technology',startWeek:1,endWeek:3,ilos:[
+      {id:'ILO1',description:'Explain the composition and behavior of plain versus reinforced concrete and principles of concrete mixing.',coIds:['CO1']},
+      {id:'ILO2',description:'Identify and select appropriate cement types, aggregates, admixtures, tools, and equipment for concrete works.',coIds:['CO1']},
+      {id:'ILO3',description:'Compute concrete mix proportions and convert them to batch quantities by weight and volume.',coIds:['CO1']}
+    ]},
+    {id:'M2',title:'Materials Estimate for Concrete Structures',startWeek:4,endWeek:6,ilos:[
+      {id:'ILO4',description:'Estimate concrete materials for slabs using the area method.',coIds:['CO1']},
+      {id:'ILO5',description:'Estimate concrete and reinforcement for columns using the linear meter method.',coIds:['CO1']},
+      {id:'ILO6',description:'Estimate materials for posts, footings, beams and girders using standard industry methods.',coIds:['CO1']}
+    ]},
+    {id:'M3',title:'Reinforcement Detailing, Fabrication & Installation',startWeek:8,endWeek:12,ilos:[
+      {id:'ILO7',description:'Identify bar grades and apply NSCP requirements for splices, hooks, and bends.',coIds:['CO2']},
+      {id:'ILO8',description:'Detail and fabricate reinforcement for independent footings and posts.',coIds:['CO2']},
+      {id:'ILO9',description:'Detail and fabricate main bars and stirrups for beams and girders.',coIds:['CO2']},
+      {id:'ILO10',description:'Detail and fabricate lateral ties and spiral ties for columns.',coIds:['CO2']},
+      {id:'ILO11',description:'Illustrate and install correct reinforcement arrangements for one-way and two-way slabs per structural drawings.',coIds:['CO2']}
+    ]},
+    {id:'M4',title:'Concrete Operations & Special Concrete',startWeek:14,endWeek:16,ilos:[
+      {id:'ILO12',description:'Demonstrate proper transporting, placing, and compaction of concrete.',coIds:['CO3']},
+      {id:'ILO13',description:'Execute finishing and curing methods and evaluate concrete quality against standards.',coIds:['CO3']},
+      {id:'ILO14',description:'Produce and evaluate precast and ferrocement elements and concrete pipe reinforcement.',coIds:['CO3']}
+    ]},
+    {id:'M5',title:'Integrated RC Works Case Study',startWeek:17,endWeek:17,ilos:[
+      {id:'ILO15',description:'Integrate and justify estimation, detailing, and operations decisions into a coherent RC works package.',coIds:['CO1','CO2','CO3']}
+    ]}
+  ];
+  const assessments = [];
+  const assign=(id,title,category,moduleId,ilos)=>{
+    assessments.push({id,title,category,moduleId,date:'',maxPoints:null,
+      allocations:ilos.map(iloId=>({iloId,points:null}))});
+  };
+  const quizzes=[
+    ['Concrete principles — true/false','M1'],['Concrete materials and tools identification','M1'],
+    ['Concrete proportioning calculations','M1'],['Slab estimate — area method','M2'],
+    ['Column estimate — linear meter method','M2'],['Post/footing/beam/girder estimate','M2'],
+    ['Steel bars, splice/hooks/bends','M3'],['Footing reinforcement detailing','M3'],
+    ['Beam and girder reinforcement','M3'],['Lateral/spiral/column ties','M3'],
+    ['One-way and two-way slab reinforcement','M3'],
+    ['Transporting/placing/compacting','M4'],['Finishing/curing/quality','M4'],
+    ['Precast, ferrocement and pipe reinforcement','M4']
+  ];
+  quizzes.forEach(([title,moduleId],i)=>assign('QILO'+(i+1),title,'quizzes',moduleId,['ILO'+(i+1)]));
+  const labs=[
+    ['Trial batching and mixing','M1',['ILO3']],
+    ['Bar cutting and bending','M3',['ILO7','ILO8']],
+    ['Stirrups and ties fabrication','M3',['ILO9','ILO10']],
+    ['Slab detailing/bar bending schedule','M3',['ILO11']],
+    ['Concrete placing and compaction','M4',['ILO12']],
+    ['Finishing and curing','M4',['ILO13']],
+    ['Precast/ferrocement/pipe activity','M4',['ILO14']]
+  ];
+  labs.forEach(([title,moduleId,ilos],i)=>assign('L'+(i+1),title,'laboratory',moduleId,ilos));
+  // Examination coverage follows syllabus weeks/modules; point-level CO splits are NOT specified.
+  assign('E1','Preliminary examination — Modules 1–2 (Week 7)','examinations','M2',
+    ['ILO1','ILO2','ILO3','ILO4','ILO5','ILO6']);
+  assign('E2','Midterm examination — Module 3 (Week 13)','examinations','M3',
+    ['ILO7','ILO8','ILO9','ILO10','ILO11']);
+  assign('E3','Final examination — Modules 4–5 (Week 18)','examinations','M5',
+    ['ILO12','ILO13','ILO14','ILO15']);
+  assign('R1','Integrated RC works case study/report (Week 17)','capstone','M5',['ILO15']);
   return {
-    schemaVersion: SCHEMA_VERSION,
-    course: {
-      institution: 'MSU-IIT', code: 'CET154', title: 'Reinforced Concrete Works',
-      term: '', sections: ['Section A', 'Section B'],
-      syllabusSource: 'CET154 - Reinforce Concrete Works Syllabus (uploaded reference)',
-      passingScore: null, coThreshold: null,
-      // Source has conflicting 70% evaluation and 65% grade-equivalence references.
-      policyNote: 'Confirm the approved course passing and CO-attainment rules before operational use.'
+    schemaVersion:SCHEMA_VERSION,
+    course:{
+      institution:'MSU-IIT',code:'CET154',title:'Reinforced Concrete Works',term:'',sections:[],
+      syllabusSource:'CET154 – Reinforce Concrete Works Syllabus (rev. 2, Jan. 25, 2026)',
+      passingScore:null,coThreshold:null,
+      policyNote:'Syllabus discrepancy: evaluation criterion cites 70% overall; grade equivalence cites 65%=3.0. Confirm rule and per-CO threshold. Laboratory ILO associations and examination item/rubric splits must be approved before scored use.'
     },
-    categoryWeights: { ...CATEGORY_WEIGHTS },
-    outcomes: [
-      { id:'CO1', description:'Estimate concrete and reinforcement materials for structural elements and apply appropriate concrete mix proportions.' },
-      { id:'CO2', description:'Detail, fabricate, and install reinforcement for RC elements in accordance with structural drawings and NSCP.' },
-      { id:'CO3', description:'Execute concrete construction and special applications; evaluate safety and quality compliance.' }
+    categoryWeights:{...CATEGORY_WEIGHTS},
+    outcomes:[
+      {id:'CO1',description:'Estimate concrete/reinforcement materials for structural elements using industry methods and apply appropriate mix proportions.'},
+      {id:'CO2',description:'Detail, fabricate and install reinforcement for footings, columns, beams and slabs according to NSCP and structural drawings.'},
+      {id:'CO3',description:'Execute concrete construction and special concrete applications and evaluate compliance with safety and quality standards.'}
     ],
-    modules: [{
-      id:'M1', title:'Fundamentals of Concrete Technology', startWeek:1, endWeek:3,
-      ilos: [
-        { id:'ILO1', description:'Explain the composition and behavior of plain versus reinforced concrete and principles of mixing.', coIds:['CO1'] },
-        { id:'ILO2', description:'Identify and select cement, aggregates, admixtures, tools and equipment for concrete works.', coIds:['CO1'] },
-        { id:'ILO3', description:'Compute mix proportions and convert to batch quantities by weight and volume.', coIds:['CO1'] }
-      ]
-    }],
-    assessments: [
-      { id:'QILO1', title:'True or False — concrete principles', category:'quizzes', moduleId:'M1', date:'', maxPoints:null, allocations:[{iloId:'ILO1',points:null}] },
-      { id:'QILO2', title:'Concrete materials and tools identification', category:'quizzes', moduleId:'M1', date:'', maxPoints:null, allocations:[{iloId:'ILO2',points:null}] },
-      { id:'QILO3', title:'Concrete proportioning calculations', category:'quizzes', moduleId:'M1', date:'', maxPoints:null, allocations:[{iloId:'ILO3',points:null}] },
-      { id:'L1', title:'Trial batching and mixing laboratory', category:'laboratory', moduleId:'M1', date:'', maxPoints:null, allocations:[{iloId:'ILO3',points:null}] }
-    ]
+    modules,assessments
   };
 }
 
@@ -139,8 +186,9 @@ export function validateBlueprint(data) {
     const mapped = new Set();
     let pointsSum = 0, complete = true;
     for (const x of a.allocations) {
-      if (mapped.has(x.iloId) || iloModule.get(x.iloId) !== a.moduleId)
-        add('error',a.id + ' has a duplicate or cross-module/invalid ILO: ' + x.iloId);
+      if (mapped.has(x.iloId) || !iloModule.has(x.iloId) ||
+          (!['examinations','capstone'].includes(a.category) && iloModule.get(x.iloId) !== a.moduleId))
+        add('error',a.id + ' has a duplicate or invalid ILO allocation: ' + x.iloId);
       mapped.add(x.iloId); assessedIlos.add(x.iloId);
       if (x.points === null) complete = false;
       else if (x.points <= 0) add('error',a.id + ': ILO allocated points must be positive.');
