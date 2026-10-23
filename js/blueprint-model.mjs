@@ -76,8 +76,8 @@ export function sampleBlueprint() {
     course:{
       institution:'MSU-IIT',code:'CET154',title:'Reinforced Concrete Works',term:'',sections:[],
       syllabusSource:'CET154 – Reinforce Concrete Works Syllabus (rev. 2, Jan. 25, 2026)',
-      passingScore:null,coThreshold:null,
-      policyNote:'Syllabus discrepancy: evaluation criterion cites 70% overall; grade equivalence cites 65%=3.0. Confirm rule and per-CO threshold. Laboratory ILO associations and examination item/rubric splits must be approved before scored use.'
+      passingScore:65,coThreshold:65,
+      policyNote:'Instructor-confirmed: passing course percentage is 65% (equivalent 3.0), and each CO is attained at 65% of verified mapped evidence. The syllabus page 2 reference to 70% must be corrected in the next approved revision. A separate cohort-level attainment-rate target has not been established. Assessment maxima, lab ILO associations and item/rubric splits require review.'
     },
     categoryWeights:{...CATEGORY_WEIGHTS},
     outcomes:[
