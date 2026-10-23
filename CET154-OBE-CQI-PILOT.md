@@ -23,7 +23,9 @@ The downloadable master Excel workbook generated in ChatGPT has **11 tabs**:
 
 Syllabus revision 2, effective 2026-01-25: **50% exams, 35% labs/performance, 10% capstone/reporting, 5% quizzes**.
 
-The syllabus contains an unresolved inconsistency: evaluation criteria say **70% passing**, while the grading table says **65% = 3.0**. It does **not** establish a definite per-CO attainment threshold. These require institutional review before real grade release.
+**Instructor clarification (2026-10-24):** The governing course passing percentage is **65%** (grade equivalent **3.0**) and **each individual CO's attainment threshold is 65% of correctly mapped/verified evidence**. The syllabus page 2 reference to 70% is superseded for the pilot and should be corrected in the next formally approved syllabus revision. The class-level **percentage of students attaining each CO** is a distinct metric; there is no instructor-confirmed class-wide benchmark yet.
+
+These thresholds are recorded in the draft configuration, but they **do not authorize grade release**. Assessment maxima, ILO/CO splits, missing-evidence procedures, section information, and final instructor review are still required.
 
 The total score for an examination or capstone spanning multiple COs must **not** be copied to each CO. Map item scores or rubric criteria to ILO/CO allocated marks, and require complete evidence before formal CO attainment judgments.
 
