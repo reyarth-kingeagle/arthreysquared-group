@@ -49,7 +49,7 @@ foreach ($file in $files) {
         }
     }
 }
-$required = @('index.html','coursework.html','styles.css','script.js','course-builder.html','course-builder.css','js/course-builder.js','js/blueprint-model.mjs','assets/logo.png','assets/rey-arth-rublico.jpg')
+$required = @('index.html','coursework.html','account.html','account.css','styles.css','script.js','course-builder.html','course-builder.css','js/course-builder.js','js/student-account.js','js/course-catalog.mjs','js/account-config.js','js/student-record-model.mjs','js/blueprint-model.mjs','assets/logo.png','assets/rey-arth-rublico.jpg')
 foreach ($name in $required) {
     if (-not (Test-ExactPath ([IO.Path]::GetFullPath((Join-Path $root $name))))) { $failures.Add("Missing required file: $name") }
 }
@@ -66,4 +66,4 @@ if ($failures.Count) {
     throw "$($failures.Count) static checks failed."
 }
 Write-Output "PASS: $($files.Count) HTML files, $checked internal references, and $($subjects.Count) subject pages checked with exact path case."
-Write-Output 'Static checks do not test browser draft persistence or future Google Apps Script/Sheets integrations.'
+Write-Output 'Static checks do not activate registration, save student credentials, or test future account authentication and Google Sheets integrations.'
