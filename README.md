@@ -1,86 +1,42 @@
 # ARTHREYSQUARED Group Website
 
-ARTHREYSQUARED Group is a static GitHub Pages website with a public Student Portal and optional Supabase-powered student accounts and protected assessments. Public lessons and resources remain available without an account.
+A static GitHub Pages educational website for the ARTHREYSQUARED Learning Hub, tutorials, publishing, and course materials.
 
-## Files
+**Website:** https://www.arthreysquared.com
 
-- `index.html` — main ARTHREYSQUARED Group homepage
-- `coursework.html` — student courseworks and instructor portal
-- `styles.css` — all colors, layout, typography, and responsive rules
-- `script.js` — mobile menu, tabs, course filters, automatic footer year
-- `Coursework/` — existing subject pages organized by institution
-- `js/` — Supabase browser client and optional account, quiz, results, instructor flows
-- `supabase/migrations/` — database schema, policies, and server-side assessment functions
-- `SETUP.md` — beginner-friendly Supabase, authentication, instructor, local test, and deployment setup
+## Current site structure
 
-## Quick start in VS Code
+- `index.html` — public ARTHREYSQUARED homepage.
+- `coursework.html` — subject listing and instructor profile.
+- `Coursework/MSU-IIT/` and `Coursework/SPC/` — existing subject pages, lessons, handouts, and activities.
+- `styles.css` and `script.js` — shared responsive design, accessible navigation, subject filters.
+- `assets/` — logo and instructor profile image.
+- `course-builder.html`, `course-builder.css` — OBE-CQI course blueprint draft editor.
+- `js/course-builder.js`, `js/blueprint-model.mjs` — editable modules, ILO/CO mapping, assessment allocation, and validation.
+- `BLUEPRINT-SETUP.md` — blueprint editor usage, current limits, and future integration notes.
+- `tests/` — static route/reference checks, blueprint model tests, and CET154 enrollment/UID integrity tests.
+- `apps-script/CET154-REGISTRATION.gs` — instructor-owned Google Forms submission automation to create private section copies and alphabetically sorted rosters.
+- `STUDENT-REGISTRATION-SETUP.md` — step-by-step instructor configuration for institutional Google Forms registration and Google Sheets.
 
-1. Open the folder in Visual Studio Code.
-2. Install the **Live Server** extension if you do not already have it.
-3. Right-click `index.html`.
-4. Choose **Open with Live Server**.
+## Start in VS Code
 
-## Optional accounts and quizzes
+1. Open this repository folder in VS Code.
+2. Right-click `index.html` and choose **Open with Live Server**, or run `python -m http.server 8765 --bind 127.0.0.1`.
+3. Open `coursework.html` for your subjects or `course-builder.html` to edit course blueprints.
+4. Export your course blueprint JSON draft for backups and future import.
 
-Follow [SETUP.md](./SETUP.md) to create the Supabase project and run the database migration. Put only your project's URL and public publishable key in `js/config.js`. Do not add a service-role/secret key or database password to browser code. Without backend configuration, the public website stays usable and accounts/quizzes are reported as unavailable.
+## Current capabilities and limitations
 
-## Important edits
+Public coursework remains available with no sign-in. The OBE-CQI blueprint editor runs entirely in your browser, saves local drafts, and exports JSON and CSV blueprints. It is **not an authenticated instructor portal**. Do not put private syllabi, student identities, grades, passwords, or answer keys in the editor.
 
-### 1. Company email
-Search for:
+A CET154 **registration pilot** is prepared but **not yet activated**: an owner-installed Google Forms submit trigger can create private section Google Sheets and insert institutionally verified applicants, sorted as complete rows. A stable Student UID links score evidence to the correct learner. The draft also includes a native Google Sheets MASTER with no student data. This is **not yet a website student account system**, automated official grading/CO attainment engine, approved enrollment management, protected quiz backend, or PDF reporting system. Set up Forms verification and complete real-world security tests before real student enrollment. No Supabase integration or SMTP setup is needed for the current static site.
 
-`hello@arthreysquared.com`
+## Development checks
 
-Replace it with your actual company email after you create one.
+- Static links and existing subject pages: `./tests/check-site.ps1` in Windows PowerShell.
+- Blueprint model tests (requires Node.js): `node --test tests/blueprint.test.mjs`.
+- Student roster/UID integrity tests: `node --test tests/student-registration.test.mjs`.
 
-### 2. Logo and profile image
+## Publishing
 
-The existing logo at `assets/logo.png` is already used across the homepage, portal, and subject pages. The supplied `assets/rey-arth-rublico.jpg` is used on the homepage and instructor profile.
-
-### 3. Brand colors
-Edit the variables near the top of `styles.css`:
-
-```css
-:root {
-  --navy: #0b1f3a;
-  --blue: #2563eb;
-  --teal: #0f766e;
-  --gold: #d99a24;
-}
-```
-
-### 4. Product/reviewer cards
-In `index.html`, edit the section with ID:
-
-`review-materials`
-
-Later, each card can link to:
-- a product page
-- a Google Form
-- a checkout page
-- a PDF preview
-- an online course
-- a store page
-
-## Recommended future pages
-
-As ARTHREYSQUARED grows, add:
-
-- `tutorials.html`
-- `review-center.html`
-- `publishing.html`
-- `catalog.html`
-- `about.html`
-- `contact.html`
-- `privacy.html`
-- `terms.html`
-
-## Recommended company architecture
-
-ARTHREYSQUARED Group
-- ARTHREYSQUARED Learning Hub
-- ARTHREYSQUARED Tutorials
-- ARTHREYSQUARED Review
-- ARTHREYSQUARED Publishing
-
-This keeps the company brand broader than the founder's current teaching assignments.
+The existing `CNAME` and GitHub Pages workflow publish the site under `www.arthreysquared.com`. Preserve existing subject page paths when updating lessons. Review feature branches and tests before merging into `main`.

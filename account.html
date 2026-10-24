@@ -1,73 +1,79 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Optional student account access | ARTHREYSQUARED Group" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ARTHREYSQUARED student registration and sign-in for coursework and future assessments.">
   <title>Student Account | ARTHREYSQUARED Group</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="js/app.js"></script>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="account.css">
+  <script type="module" src="js/student-account.js"></script>
 </head>
-<body data-page="account">
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header"><div class="container subject-header-inner">
-    <a class="brand" href="index.html" aria-label="ARTHREYSQUARED Group home"><img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" class="brand-logo" width="64" height="64" /><span class="brand-copy"><strong>ARTHREYSQUARED</strong><small>GROUP</small></span></a>
-    <nav class="subject-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="coursework.html">Student Portal</a></nav>
-  </div></header>
-  <main id="main-content" class="account-layout" tabindex="-1">
-    <a href="coursework.html">← Back to Student Portal</a>
-    <span class="section-kicker">OPTIONAL STUDENT ACCESS</span>
-    <h1>Student account</h1>
-    <p>Accounts are only needed for quizzes and results. Public coursework stays open to everyone.</p>
-    <p id="auth-status" data-page-status class="status-message" role="status" aria-live="polite"></p>
-    <div data-auth-forms>
-      <section data-auth-panel="signin" class="profile-card">
-        <h2>Sign in</h2>
-        <form class="form-stack" data-auth-form="signin" aria-describedby="auth-status">
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <label>Password<input type="password" name="password" autocomplete="current-password" required /></label>
-          <button class="btn btn-primary" type="submit">Sign in</button>
-          <button class="text-link button-link" type="button" data-mode="reset">Forgot password?</button>
-          <p><button class="text-link button-link" type="button" data-mode="signup">Create account</button></p>
-        </form>
-      </section>
-      <section data-auth-panel="signup" class="profile-card" hidden>
-        <h2>Create student account</h2>
-        <form class="form-stack" data-auth-form="signup" aria-describedby="auth-status">
-          <label>Your name<input type="text" name="full_name" autocomplete="name" maxlength="120" required /></label>
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <label>Password (at least 10 characters)<input type="password" name="password" autocomplete="new-password" minlength="10" required /></label>
-          <button class="btn btn-primary" type="submit">Create account</button>
-          <p>New accounts start as students. Restricted class tests require instructor approval.</p>
-          <p><button class="text-link button-link" type="button" data-mode="signin">Already have an account? Sign in</button></p>
-        </form>
-      </section>
-      <section data-auth-panel="reset" class="profile-card" hidden>
-        <h2>Reset password</h2>
-        <form class="form-stack" data-auth-form="reset-request" aria-describedby="auth-status">
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <button class="btn btn-primary" type="submit">Send password reset link</button>
-          <button class="text-link button-link" type="button" data-mode="signin">Back to sign in</button>
-        </form>
-        <form class="form-stack" data-auth-form="reset-password" aria-describedby="auth-status" hidden>
-          <label>New password<input type="password" name="password" autocomplete="new-password" minlength="10" required /></label>
-          <button class="btn btn-primary" type="submit">Save new password</button>
-        </form>
-      </section>
-      <section data-auth-panel="verify" class="profile-card" hidden>
-        <h2>Check your email</h2><p>Use the verification link to confirm your address. After confirmation, you will return to the assessment you selected.</p>
-      </section>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <div class="container subject-header-inner">
+      <a class="brand" href="index.html" aria-label="ARTHREYSQUARED Group Home">
+        <img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" width="64" height="64" class="brand-logo">
+        <span class="brand-copy"><strong>ARTHREYSQUARED</strong><small>GROUP</small></span>
+      </a>
+      <nav class="subject-navigation" aria-label="Main navigation">
+        <a href="index.html">Home</a><a href="coursework.html">Courses</a>
+      </nav>
     </div>
-    <section data-profile hidden class="profile-card">
-      <h2>My account</h2><p data-profile-email></p>
-      <form class="form-stack" data-profile-form aria-describedby="auth-status">
-        <label>Your name<input type="text" name="full_name" autocomplete="name" maxlength="120" required /></label>
-        <button class="btn btn-primary" type="submit">Save profile</button>
-      </form>
-      <h3>Subject enrollment requests</h3><div data-enrollments></div>
-      <div class="action-row"><a class="btn btn-secondary" href="results.html">My results</a><button class="btn btn-secondary" type="button" data-signout>Sign out</button></div>
-    </section>
-    <noscript><p>Interactive account features require JavaScript. Public lessons and coursework do not.</p></noscript>
+  </header>
+  <main id="main-content" class="account-shell" tabindex="-1">
+    <div class="account-intro">
+      <span class="section-kicker">ARTHREYSQUARED LEARNING HUB</span>
+      <h1>Student account</h1>
+      <p>Access your coursework now. When protected assessments are enabled, registered students will sign in with their email and passcode.</p>
+    </div>
+    <div class="account-layout">
+      <section class="account-panel" aria-labelledby="account-title">
+        <div class="account-tabs" role="group" aria-label="Account mode">
+          <button type="button" id="mode-signup" aria-pressed="true">Create account</button>
+          <button type="button" id="mode-signin" aria-pressed="false">Sign in</button>
+        </div>
+        <h2 id="account-title">Create a student account</h2>
+        <div class="account-notice" role="note"><strong>Development preview.</strong> Registration is not accepting personal data yet. The form layout is available for review, but no student account is created until the private authentication service is configured and security-tested.</div>
+        <form id="signup-form" class="account-form">
+          <div class="account-grid">
+            <label>Family name <input name="family" autocomplete="family-name" required maxlength="80" placeholder="e.g. Dela Cruz"></label>
+            <label>Given name <input name="given" autocomplete="given-name" required maxlength="80" placeholder="e.g. Juan"></label>
+          </div>
+          <div class="account-grid">
+            <label>Middle initial <input name="middle" maxlength="2" placeholder="e.g. A."></label>
+            <label>Student ID number <input name="studentId" required maxlength="40" autocomplete="off" placeholder="Student ID number"></label>
+          </div>
+          <label>Email address <input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="student@g.msuiit.edu.ph"></label>
+          <div class="account-grid">
+            <label>Course <select name="course" id="signup-course" required></select></label>
+            <label>Section <input name="section" required maxlength="50" placeholder="Enter your official section"></label>
+          </div>
+          <p id="course-guidance" class="account-help" aria-live="polite"></p>
+          <div class="account-grid">
+            <label>Passcode <input name="passcode" type="password" required minlength="12" maxlength="128" autocomplete="new-password" placeholder="At least 12 characters"></label>
+            <label>Confirm passcode <input name="confirmation" type="password" required minlength="12" maxlength="128" autocomplete="new-password" placeholder="Repeat your passcode"></label>
+          </div>
+          <p class="account-help">Choose a unique passcode you do not use elsewhere. Do not share it with classmates or your instructor. Passcodes must never be written to class-record sheets.</p>
+          <button class="btn btn-primary" type="submit" id="signup-submit">Review registration (preview)</button>
+        </form>
+        <form id="signin-form" class="account-form" hidden>
+          <label>Email address <input name="email" type="email" required maxlength="120" autocomplete="username" placeholder="Your registered email address"></label>
+          <label>Passcode <input name="passcode" type="password" required autocomplete="current-password" placeholder="Your account passcode"></label>
+          <button class="btn btn-primary" type="submit" id="signin-submit">Review sign-in (preview)</button>
+        </form>
+        <div id="account-status" role="status" aria-live="polite" class="account-status" tabindex="-1"></div>
+        <p class="account-help"><strong>Forgotten passcode?</strong> Contact your instructor for an account-credential reset. Your scores and student record must be preserved; they should not be deleted to reset a passcode.</p>
+      </section>
+      <aside class="account-side" aria-label="About your student record">
+        <div class="account-side-icon" aria-hidden="true">01</div>
+        <h2>One identity. Correct section. Reliable grades.</h2>
+        <p>Your course registration will be assigned a permanent student identifier, independent of the row number in Google Sheets.</p>
+        <p>When late enrollees register, the system will sort complete student rows alphabetically while retaining each person's linked assessment scores.</p>
+        <p><strong>Public handouts and lessons remain available without registration.</strong> Only future quizzes and restricted activities will require a verified account.</p>
+        <a href="coursework.html" class="text-link">Browse courses →</a>
+      </aside>
+    </div>
   </main>
+  <footer class="site-footer"><div class="container"><p>© 2026 ARTHREYSQUARED Group · Learning Hub</p></div></footer>
 </body>
 </html>
