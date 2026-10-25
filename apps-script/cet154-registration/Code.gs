@@ -8,7 +8,7 @@ var CET154 = Object.freeze({
   HEADER: ['Student ID Number','Verified Email','Family Name','Given Name','Middle Name','Section','Passcode'],
   DOMAIN: 'g.msuiit.edu.ph',
   MAX_ROWS: 400,
-  MIN_PASSCODE_LENGTH: 16,
+  MIN_PASSCODE_LENGTH: 8,
   RATE_WINDOW_SECONDS: 600,
   MAX_ATTEMPTS: 8
 });
@@ -129,7 +129,7 @@ function validateInput_(x) {
   });
   if (!/^[\w.+-]+@g\.msuiit\.edu\.ph$/i.test(result.email)) throw new Error('Use your MSU-IIT institutional email.');
   result.email = result.email.toLowerCase();
-  if (result.passcode.length < CET154.MIN_PASSCODE_LENGTH || result.passcode.length > 128) throw new Error('Use a passcode of at least 16 characters.');
+  if (result.passcode.length < CET154.MIN_PASSCODE_LENGTH || result.passcode.length > 128) throw new Error('Use a passcode of at least 8 characters.');
   if (result.passcode !== result.confirmPasscode) throw new Error('Passcodes do not match.');
   delete result.confirmPasscode;
   return result;
@@ -157,7 +157,7 @@ function rateLimit_(student, secret) {
   if (count > CET154.MAX_ATTEMPTS) throw new Error('Too many registration attempts. Contact your instructor.');
 }
 /** Server-peppered, salted HMAC for an access passcode, NOT a general-purpose password KDF.
- * Students must use a NEW 16+ character passcode never reused for an actual account.
+ * Students must use a NEW 8+ character passcode never reused for an actual account.\n * Longer, randomly generated passcodes are preferable; 8 is only the minimum.
  * If password-based login is added, migrate to Argon2id/scrypt on a trusted backend. */
 function passcodeHash_(passcode, secret) {
   var salt = Utilities.getUuid();
