@@ -33,11 +33,11 @@ function updateSelectedCourse(){
   schoolName.textContent=course?course.institution:'MSU-IIT or St. Peter’s College';
   back.textContent=course?'← Back to '+course.code:'← Back to courses';
   back.href=course?course.page:'coursework.html';
-  help.textContent=course?.domain?'Use your '+course.institution+' institutional email ending in @'+course.domain+'. Section must match your official class assignment.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
+  help.textContent=course?.domain?'Use your '+course.institution+' institutional email ending in @'+course.domain+'. For CET154, your instructor will verify your ID, school email and section face-to-face.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
   get('enroll-email').placeholder=course?.domain?'student@'+course.domain:'Institutional email address';
   const cet154 = course?.id === 'msuiit-cet154';
   const emailLabel = get('enroll-email-label');
-  if (emailLabel) emailLabel.firstChild.nodeValue = cet154 ? 'Institutional Email (verification pending) ' : 'Verified Email ';
+  if (emailLabel) emailLabel.firstChild.nodeValue = cet154 ? 'Institutional Email (instructor review pending) ' : 'Verified Email ';
   const middleLabel = get('enroll-middle-label');
   const middleInput = get('enroll-middle');
   if (middleLabel) middleLabel.firstChild.nodeValue = cet154 ? 'Middle Name ' : 'Middle Initial ';
