@@ -45,6 +45,16 @@ Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/
 
 Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Do not enter or solicit genuine student IDs, institutional emails, or passwords on the current design-preview form.**
 
+## CET154 private roster registration — prepared but not deployed
+
+The repository now includes a Google Apps Script student registration service in `apps-script/cet154-registration/`. It checks Family Name + Given Name in the selected private roster tab, requires all other registration fields initially blank, and updates the existing student row only once. Repeated complete records are rejected as already registered; missing and partial cases refer to the instructor. The existing Section tabs are recognized dynamically from the private Sheet.
+
+**Important:** This is **not live** yet. The Sheet owner must create/deploy the bound Apps Script web app, test it, and add the actual deployment URL to `js/cet154-registration-config.js` before the CET154 enrollment button launches the Google-hosted form. Do not enter student information into the current preview until live activation. See `apps-script/cet154-registration/SETUP.md`.
+
+No real student names, credentials, HMAC secret, or private spreadsheet ID are stored in public GitHub source. The Google Sheet is unchanged. Students remain able to access public coursework without enrollment.
+
+A roster-name match is **not proof of identity or verified email ownership**. Student emails are format-checked; instructor confirmation or school sign-in is recommended before releasing restricted assessments. No quizzes or assessments are included here.
+
 ## Current student access
 
 Lessons and handouts are public and do not require an account. No active student account creation, secure sign-in, registration storage, protected quiz, results dashboard, or Supabase database integration is present in the **published main branch**. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
