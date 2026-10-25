@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CET154 Student Enrollment | ARTHREYSQUARED</title>
+  <style>
+    :root{--navy:#0b1f3a;--blue:#264f73;--teal:#0f766e;--gold:#947321;--border:#dce5ed;--ink:#0f172a;--muted:#475569}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f9fc;color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+    .header{background:var(--navy);color:#fff;padding:21px clamp(16px,5vw,64px);border-bottom:4px solid var(--gold)}
+    .header strong{font-size:1.05rem;letter-spacing:.07em}.header small{display:block;font-size:.78rem;color:#b8d1df;letter-spacing:.16em}
+    main{max-width:1050px;margin:30px auto;padding:0 16px 60px}
+    .kicker{font-size:.78rem;color:var(--teal);font-weight:800;letter-spacing:.13em}
+    h1{font-size:clamp(2rem,5vw,3rem);line-height:1.18;color:var(--navy);margin:8px 0}
+    .intro{max-width:800px;color:var(--muted);margin:0 0 24px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.9fr);gap:22px;align-items:start}
+    .card,.aside{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 8px 26px rgba(15,23,42,.06);overflow:hidden}
+    .card{padding:28px}.aside-head{background:var(--navy);color:white;padding:24px}.aside-head strong{display:block;font-size:1.2rem}
+    .aside-body{padding:24px;color:var(--muted);font-size:.92rem}.aside-body p{margin:0 0 14px}
+    h2{font-size:1.38rem;margin:0 0 6px}h3{font-size:1.07rem;border-top:1px solid var(--border);padding-top:22px;margin:26px 0 14px;color:var(--navy)}
+    .hint{font-size:.84rem;color:#526678;margin:0 0 18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:grid;gap:6px;margin:0 0 15px}
+    label{font-size:.88rem;font-weight:730}.req{color:#965617}
+    input,select{background:white;color:var(--ink);border:1px solid #9caebf;border-radius:9px;padding:11px 12px;min-height:46px;width:100%;font:inherit}
+    input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+    button{background:var(--teal);color:white;border:0;border-radius:10px;padding:12px 18px;min-height:48px;font-weight:800;cursor:pointer}
+    button:disabled{opacity:.55;cursor:wait}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+    .message{min-height:28px;white-space:pre-wrap;font-weight:750;margin:14px 0 0}.message[data-type=success]{color:#0a655d}.message[data-type=error]{color:#99322c}
+    .banner{padding:12px 16px;margin:18px 0;background:#fff8e9;border-left:4px solid var(--gold);font-size:.89rem;color:#6c5428;border-radius:8px}
+    .note{color:#536172;font-size:.85rem}
+    @media(max-width:810px){.layout{grid-template-columns:1fr}}
+    @media(max-width:580px){.grid{grid-template-columns:1fr}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <header class="header"><strong>ARTHREYSQUARED</strong><small>GROUP · LEARNING HUB</small></header>
+  <main>
+    <span class="kicker">MSU-IIT / CET154</span>
+    <h1>CET154 Student Enrollment</h1>
+    <p class="intro">Reinforced Concrete Works. Registration is for students listed on the instructor's official private roster. Course lessons and handouts remain publicly accessible.</p>
+    <div class="layout">
+      <section class="card" aria-labelledby="reg-title">
+        <h2 id="reg-title">Complete your registration</h2>
+        <p class="hint">All fields are required. Use your real school records and a new passcode you do not use on any other website.</p>
+        <div class="banner">Your complete Family Name and Given Name must match the official student registry in your selected section. A roster match does not independently verify ownership of your email address.</div>
+        <form id="registration">
+          <h3>Course information</h3>
+          <div class="field"><label for="section">Section <span class="req">*</span></label><select id="section" name="section" required disabled><option value="">Loading sections…</option></select></div>
+          <h3>Student information</h3>
+          <div class="field"><label for="studentId">Student ID Number <span class="req">*</span></label><input id="studentId" name="studentId" type="text" maxlength="40" autocomplete="off" required></div>
+          <div class="grid">
+            <div class="field"><label for="familyName">Family Name <span class="req">*</span></label><input id="familyName" name="familyName" maxlength="120" autocomplete="family-name" required></div>
+            <div class="field"><label for="givenName">Given Name <span class="req">*</span></label><input id="givenName" name="givenName" maxlength="120" autocomplete="given-name" required></div>
+          </div>
+          <div class="grid">
+            <div class="field"><label for="middleName">Middle Name <span class="req">*</span></label><input id="middleName" name="middleName" maxlength="120" autocomplete="additional-name" placeholder="Use N/A if none" required></div>
+            <div class="field"><label for="email">Institutional Email <span class="req">*</span></label><input id="email" name="email" type="email" maxlength="120" placeholder="student@g.msuiit.edu.ph" autocomplete="email" required></div>
+          </div>
+          <h3>Student passcode</h3>
+          <div class="grid">
+            <div class="field"><label for="passcode">Passcode <span class="req">*</span></label><input id="passcode" name="passcode" type="password" minlength="16" maxlength="128" autocomplete="new-password" placeholder="At least 16 characters" required></div>
+            <div class="field"><label for="confirmPasscode">Retype Passcode <span class="req">*</span></label><input id="confirmPasscode" name="confirmPasscode" type="password" minlength="16" maxlength="128" autocomplete="new-password" required></div>
+          </div>
+          <p class="note">Only a protected passcode representation is saved in the private registry. Your original passcode cannot be recovered by the instructor. If you forget it, contact your instructor for a future reset procedure.</p>
+          <div class="actions"><button id="submit" disabled type="submit">Complete Enrollment</button><span id="loading" class="note"></span></div>
+          <p class="message" id="message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+      <aside class="aside" aria-label="Enrollment guidelines"><div class="aside-head"><strong>Before you enroll</strong></div><div class="aside-body">
+        <p><strong>Public access.</strong> Anyone may view public CET154 learning materials without registration.</p>
+        <p><strong>Official roster.</strong> Registration is limited to the names already provided by the school administration for the selected section.</p>
+        <p><strong>One enrollment.</strong> If your record is already complete, you will be notified and it will not be overwritten.</p>
+        <p><strong>Need assistance?</strong> If your name is missing or does not match, contact your instructor for re-verification.</p>
+        <p><strong>Email identity.</strong> Registration checks the address format; email ownership is not automatically verified.</p>
+      </div></aside>
+    </div>
+  </main>
+  <script>
+    (function(){
+      'use strict';
+      const form=document.getElementById('registration');
+      const select=document.getElementById('section');
+      const submit=document.getElementById('submit');
+      const message=document.getElementById('message');
+      const loading=document.getElementById('loading');
+      const say=(text,type)=>{message.textContent=text;message.dataset.type=type;};
+      google.script.run.withFailureHandler(()=>{
+        select.innerHTML='<option value="">Unable to load sections</option>';
+        say('Registration is currently unavailable. Please contact your instructor.','error');
+      }).withSuccessHandler(sections=>{
+        select.replaceChildren();
+        const empty=document.createElement('option');empty.value='';empty.textContent='Choose your official section';select.append(empty);
+        for(const section of sections){const opt=document.createElement('option');opt.value=section;opt.textContent=section;select.append(opt);}
+        if(sections.length){select.disabled=false;submit.disabled=false;}
+        else say('No eligible section is currently available. Contact your instructor.','error');
+      }).getRegistrationSections();
+      form.addEventListener('submit',event=>{
+        event.preventDefault();
+        if(!form.reportValidity())return;
+        const data=Object.fromEntries(new FormData(form).entries());
+        if(data.passcode!==data.confirmPasscode){say('Passcodes do not match.','error');return;}
+        if(!/^[\w.+-]+@g\.msuiit\.edu\.ph$/i.test(data.email)){say('Use your institutional email address.','error');return;}
+        submit.disabled=true;loading.textContent='Checking the private roster…';say('','error');
+        google.script.run.withSuccessHandler(result=>{
+          loading.textContent='';submit.disabled=false;
+          say(result.message,result.ok?'success':'error');
+          document.getElementById('passcode').value='';document.getElementById('confirmPasscode').value='';
+          if(result.ok){form.reset();select.value='';submit.disabled=true;}
+        }).withFailureHandler(error=>{
+          loading.textContent='';submit.disabled=false;
+          document.getElementById('passcode').value='';document.getElementById('confirmPasscode').value='';
+          say(error && /Too many registration attempts/.test(error.message)?error.message:'Unable to complete registration. Contact your instructor.','error');
+        }).submitRegistration(data);
+      });
+    })();
+  </script>
+</body>
+</html>
