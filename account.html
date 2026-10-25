@@ -1,73 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Optional student account access | ARTHREYSQUARED Group" />
-  <title>Student Account | ARTHREYSQUARED Group</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="js/app.js"></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Enroll in an ARTHREYSQUARED coursework subject.">
+  <title>Subject Enrollment | ARTHREYSQUARED Group</title>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="account.css">
+  <script type="module" src="js/student-account.js"></script>
 </head>
-<body data-page="account">
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header"><div class="container subject-header-inner">
-    <a class="brand" href="index.html" aria-label="ARTHREYSQUARED Group home"><img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" class="brand-logo" width="64" height="64" /><span class="brand-copy"><strong>ARTHREYSQUARED</strong><small>GROUP</small></span></a>
-    <nav class="subject-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="coursework.html">Student Portal</a></nav>
+    <a class="brand" href="index.html" aria-label="ARTHREYSQUARED Group Home"><img src="assets/logo.png" alt="ARTHREYSQUARED Group logo" width="64" height="64" class="brand-logo"><span class="brand-copy"><strong>ARTHREYSQUARED</strong><small>GROUP</small></span></a>
+    <nav class="subject-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="coursework.html">Courses</a></nav>
   </div></header>
-  <main id="main-content" class="account-layout" tabindex="-1">
-    <a href="coursework.html">← Back to Student Portal</a>
-    <span class="section-kicker">OPTIONAL STUDENT ACCESS</span>
-    <h1>Student account</h1>
-    <p>Accounts are only needed for quizzes and results. Public coursework stays open to everyone.</p>
-    <p id="auth-status" data-page-status class="status-message" role="status" aria-live="polite"></p>
-    <div data-auth-forms>
-      <section data-auth-panel="signin" class="profile-card">
-        <h2>Sign in</h2>
-        <form class="form-stack" data-auth-form="signin" aria-describedby="auth-status">
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <label>Password<input type="password" name="password" autocomplete="current-password" required /></label>
-          <button class="btn btn-primary" type="submit">Sign in</button>
-          <button class="text-link button-link" type="button" data-mode="reset">Forgot password?</button>
-          <p><button class="text-link button-link" type="button" data-mode="signup">Create account</button></p>
+  <main id="main-content" class="account-shell" tabindex="-1">
+    <div class="account-intro"><span class="section-kicker">ARTHREYSQUARED LEARNING HUB</span><h1>Enroll in a subject</h1><p>Enter your student details to request enrollment. Your coursework materials remain available while enrollment is being set up.</p></div>
+    <div class="account-layout">
+      <section class="account-panel" aria-labelledby="account-title">
+        <h2 id="account-title">Student enrollment</h2>
+        <div class="account-notice" role="note"><strong>Enrollment is not active yet.</strong> This website has no secure registration service connected. Do not enter real personal information or a real password here until the backend is configured.</div>
+        <form id="signup-form" class="account-form">
+          <div class="account-grid">
+            <label>Surname <input name="family" autocomplete="family-name" required maxlength="80" placeholder="e.g. Dela Cruz"></label>
+            <label>Given name <input name="given" autocomplete="given-name" required maxlength="80" placeholder="e.g. Juan"></label>
+          </div>
+          <div class="account-grid">
+            <label>Middle name <input name="middle" autocomplete="additional-name" required maxlength="80" placeholder="Enter middle name"></label>
+            <label>Student ID number <input name="studentId" required maxlength="40" autocomplete="off" placeholder="Student ID number"></label>
+          </div>
+          <label>Email address <input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="student@g.msuiit.edu.ph"></label>
+          <div class="account-grid"><label>Subject <select name="course" id="signup-course" required></select></label><label>Section <input name="section" required maxlength="50" placeholder="Your official section"></label></div>
+          <p id="course-guidance" class="account-help" aria-live="polite"></p>
+          <div class="account-grid">
+            <label>Password <input name="passcode" type="password" required minlength="12" maxlength="128" autocomplete="new-password" placeholder="At least 12 characters"></label>
+            <label>Retype password <input name="confirmation" type="password" required minlength="12" maxlength="128" autocomplete="new-password" placeholder="Retype your password"></label>
+          </div>
+          <p class="account-help">Passwords are private credentials. They must be processed by a secure authentication service and must never be saved in Google Sheets.</p>
+          <button class="btn btn-primary" type="submit" id="signup-submit">Check enrollment details</button>
         </form>
+        <div id="account-status" role="status" aria-live="polite" class="account-status" tabindex="-1"></div>
       </section>
-      <section data-auth-panel="signup" class="profile-card" hidden>
-        <h2>Create student account</h2>
-        <form class="form-stack" data-auth-form="signup" aria-describedby="auth-status">
-          <label>Your name<input type="text" name="full_name" autocomplete="name" maxlength="120" required /></label>
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <label>Password (at least 10 characters)<input type="password" name="password" autocomplete="new-password" minlength="10" required /></label>
-          <button class="btn btn-primary" type="submit">Create account</button>
-          <p>New accounts start as students. Restricted class tests require instructor approval.</p>
-          <p><button class="text-link button-link" type="button" data-mode="signin">Already have an account? Sign in</button></p>
-        </form>
-      </section>
-      <section data-auth-panel="reset" class="profile-card" hidden>
-        <h2>Reset password</h2>
-        <form class="form-stack" data-auth-form="reset-request" aria-describedby="auth-status">
-          <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
-          <button class="btn btn-primary" type="submit">Send password reset link</button>
-          <button class="text-link button-link" type="button" data-mode="signin">Back to sign in</button>
-        </form>
-        <form class="form-stack" data-auth-form="reset-password" aria-describedby="auth-status" hidden>
-          <label>New password<input type="password" name="password" autocomplete="new-password" minlength="10" required /></label>
-          <button class="btn btn-primary" type="submit">Save new password</button>
-        </form>
-      </section>
-      <section data-auth-panel="verify" class="profile-card" hidden>
-        <h2>Check your email</h2><p>Use the verification link to confirm your address. After confirmation, you will return to the assessment you selected.</p>
-      </section>
+      <aside class="account-side" aria-label="Enrollment information"><div class="account-side-icon" aria-hidden="true">01</div><h2>Enroll for your subject</h2><p>Choose the subject you are currently viewing, then enter your name, ID, institutional email, and section.</p><p>MSU-IIT enrollment requires an email ending in <strong>@g.msuiit.edu.ph</strong>.</p><p><strong>Currently, the form only checks your entries in this browser.</strong> No data or password is transmitted or saved.</p><a href="https://drive.google.com/drive/folders/1czVh-IBsB-TqbVhzsMLvxj5iy4DvdHSV?usp=drive_link" class="text-link" target="_blank" rel="noopener">Open the enrollment data folder →</a></aside>
     </div>
-    <section data-profile hidden class="profile-card">
-      <h2>My account</h2><p data-profile-email></p>
-      <form class="form-stack" data-profile-form aria-describedby="auth-status">
-        <label>Your name<input type="text" name="full_name" autocomplete="name" maxlength="120" required /></label>
-        <button class="btn btn-primary" type="submit">Save profile</button>
-      </form>
-      <h3>Subject enrollment requests</h3><div data-enrollments></div>
-      <div class="action-row"><a class="btn btn-secondary" href="results.html">My results</a><button class="btn btn-secondary" type="button" data-signout>Sign out</button></div>
-    </section>
-    <noscript><p>Interactive account features require JavaScript. Public lessons and coursework do not.</p></noscript>
   </main>
+  <footer class="site-footer"><div class="container"><p>© 2026 ARTHREYSQUARED Group · Learning Hub</p></div></footer>
 </body>
 </html>
