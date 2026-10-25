@@ -157,7 +157,8 @@ function rateLimit_(student, secret) {
   if (count > CET154.MAX_ATTEMPTS) throw new Error('Too many registration attempts. Contact your instructor.');
 }
 /** Server-peppered, salted HMAC for an access passcode, NOT a general-purpose password KDF.
- * Students must use a NEW 8+ character passcode never reused for an actual account.\n * Longer, randomly generated passcodes are preferable; 8 is only the minimum.
+ * Students must use a NEW 8+ character passcode never reused for an actual account.
+ * Longer, randomly generated passcodes are preferable; 8 is only the minimum.
  * If password-based login is added, migrate to Argon2id/scrypt on a trusted backend. */
 function passcodeHash_(passcode, secret) {
   var salt = Utilities.getUuid();
