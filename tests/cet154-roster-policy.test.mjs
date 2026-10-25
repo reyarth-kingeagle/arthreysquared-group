@@ -16,7 +16,7 @@ test('recognizes section tabs from sheet headers and ignores archived and unrela
 });
 test('requires exact normalized family+given name in selected section',()=>{
   const ok=matchPrivateRoster(tabs,{section:' h1w23 ',familyName:' DEL   ROSARIO ',givenName:'mara'});
-  assert.equal(ok.status,'ELIGIBLE_PENDING_EMAIL_VERIFICATION');
+  assert.equal(ok.status,'ELIGIBLE_PENDING_INSTRUCTOR_REVIEW');
   assert.equal(ok.section,'H1W23');
   assert.equal(ok.internalMatch.rowNumber,2);
   assert.equal(matchPrivateRoster(tabs,{section:'H1W23',familyName:'Del',givenName:'Mara'}).status,'REVIEW_REQUIRED');
@@ -32,9 +32,16 @@ test('duplicate full names in a section require instructor review',()=>{
 test('new cohort tabs automatically appear without a source-code change',()=>{
  const next=[...tabs,{title:'AY2027-28_H1W23',rows:[headers,['','','Dela Cruz','Jo']]}];
  assert.ok(listEligibleSections(next).includes('AY2027-28_H1W23'));
- assert.equal(matchPrivateRoster(next,{section:'AY2027-28_H1W23',familyName:'Dela Cruz',givenName:'Jo'}).status,'ELIGIBLE_PENDING_EMAIL_VERIFICATION');
+ assert.equal(matchPrivateRoster(next,{section:'AY2027-28_H1W23',familyName:'Dela Cruz',givenName:'Jo'}).status,'ELIGIBLE_PENDING_INSTRUCTOR_REVIEW');
 });
 test('public errors cannot reveal whether a student is on the private roster',()=>{
  assert.equal(safeUserMessage('NOT_FOUND'),safeUserMessage('AMBIGUOUS'));
- assert.equal(safeUserMessage('NOT_FOUND'),safeUserMessage('PENDING_EMAIL'));
+ assert.equal(safeUserMessage('NOT_FOUND'),safeUserMessage('REJECTED'));
+});
+
+test('a roster match does not confer approved enrollment',()=>{
+  const result=matchPrivateRoster(tabs,{section:'H1W23',familyName:'Santos',givenName:'Lei'});
+  assert.equal(result.status,'ELIGIBLE_PENDING_INSTRUCTOR_REVIEW');
+  assert.notEqual(result.status,'APPROVED');
+  assert.match(safeUserMessage('PENDING_INSTRUCTOR_REVIEW'),/face-to-face verification/i);
 });
