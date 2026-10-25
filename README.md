@@ -45,6 +45,12 @@ Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/
 
 Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Do not enter or solicit genuine student IDs, institutional emails, or passwords on the current design-preview form.**
 
+## CET154 roster eligibility — next development phase
+
+CET154 has an instructor-owned, **private** student registry with currently recognized section tabs `H1W23` and `H1M23`. We have implemented a policy draft that matches complete Family Name + Given Name within an exact section and marks unmatched or duplicate names for instructor review. A roster match **alone** never activates an account; the student must still verify email ownership.
+
+See `CET154-REGISTRATION-PHASE1.md` for the safe phased rollout, private-sheet tab conventions, and password-handling requirements. The pure roster matching policy is located in `server/cet154-roster-policy.mjs`, with synthetic tests in `tests/cet154-roster-policy.test.mjs`. No real roster, credentials, Google Sheets integration, or live account registration is included in this branch.
+
 ## Current student access
 
 Lessons and handouts are public and do not require an account. No active student account creation, secure sign-in, registration storage, protected quiz, results dashboard, or Supabase database integration is present in the **published main branch**. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
