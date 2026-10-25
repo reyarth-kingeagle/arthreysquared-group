@@ -4,6 +4,6 @@
  * Leave empty until Google Apps Script deployment and smoke tests pass.
  *
  * Example (do not invent a URL):
- * export const CET154_REGISTRATION_WEB_APP_URL = 'https://script.google.com/macros/s/<deployment-id>/exec';
+ * export const CET154_REGISTRATION_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw-AxA-LqW-c7payERa0pWdRJ15DmXc5ZzgEomdJBhTlRjFwnby9PMT0Sqvgha1Yxua/exec';
  */
 export const CET154_REGISTRATION_WEB_APP_URL = '';
