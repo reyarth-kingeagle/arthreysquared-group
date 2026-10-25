@@ -78,12 +78,26 @@ test('blocks repeated ID/email across active tabs',()=>{
  tabs[1].rows[1][0]='';tabs[1].rows[1][1]='ana@g.msuiit.edu.ph';
  assert.equal(context.submitRegistration({...data}).status,'CONTACT_INSTRUCTOR');
 });
-test('requires real institutional email, all fields and a matching 16+ passcode',()=>{
+test('requires real institutional email, all fields and a matching 8+ passcode',()=>{
  const {context}=environment();assert.throws(()=>context.submitRegistration({...data,email:'ana@example.org'}));
  assert.throws(()=>context.submitRegistration({...data,passcode:'tiny',confirmPasscode:'tiny'}));
  assert.throws(()=>context.submitRegistration({...data,confirmPasscode:'different-passcode'}));
  assert.throws(()=>context.submitRegistration({...data,studentId:''}));
 });
+test('accepts exactly eight characters and rejects seven without modifying the roster',()=>{
+ const validPasscode='MsuIit8!';
+ const badPasscode='MsuIit8';
+ assert.equal(validPasscode.length,8);assert.equal(badPasscode.length,7);
+ const {context:invalidContext,tabs:invalidTabs}=environment();
+ assert.throws(()=>invalidContext.submitRegistration({...data,passcode:badPasscode,confirmPasscode:badPasscode}),/at least 8 characters/);
+ assert.equal(invalidTabs[0].rows[1][6],'');
+ const {context,tabs}=environment();
+ const result=context.submitRegistration({...data,passcode:validPasscode,confirmPasscode:validPasscode});
+ assert.equal(result.status,'REGISTERED');
+ assert.equal(context.verifyPasscode_(validPasscode,tabs[0].rows[1][6]),true);
+ assert.equal(context.verifyPasscode_(badPasscode,tabs[0].rows[1][6]),false);
+});
+
 test('auto-discovers a new future section tab and ignores archived tabs',()=>{
  const next={name:'AY2027-28_H1W23',rows:[HEAD.slice(),empty('Test','Person')]};
  const old={name:'ARCHIVE_AY2025_H1W23',rows:[HEAD.slice(),empty('Old','Person')]};

@@ -42,6 +42,10 @@ function updateSelectedCourse(){
   const middleInput = get('enroll-middle');
   middleInput.maxLength = isCet154 ? 120 : 2;
   middleInput.placeholder = isCet154 ? 'Your full middle name' : 'e.g., M.';
+  // Preview fields for CET154 follow its actual minimum; other subjects remain unchanged.
+  for (const id of ['enroll-password','enroll-confirm']) get(id).minLength = isCet154 ? 8 : 12;
+  get('enroll-password').placeholder = isCet154 ? 'At least 8 characters' : 'At least 12 characters';
+
   let liveUrl = null;
   try {
     if (CET154_REGISTRATION_WEB_APP_URL) {
