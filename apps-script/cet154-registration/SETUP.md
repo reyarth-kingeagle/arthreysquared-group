@@ -29,7 +29,7 @@ You must deploy this as the **Sheet owner**, because the connection requires gra
 8. Copy the **Web app URL ending in `/exec`** from the deployment dialog.
 9. In your VS Code project, open `js/cet154-registration-config.js`, insert **only that actual web-app URL**, e.g. `export const CET154_REGISTRATION_WEB_APP_URL = 'https://script.google.com/macros/s/DEPLOYMENT-ID/exec';` (replace DEPLOYMENT-ID with Google's actual URL).
 10. Test first using an instructor-authorized, eligible **test row** in a designated active private roster tab, then review the A:G values. Never perform the first end-to-end test by taking over a real student's unused name.
-11. After tests, merge the GitHub PR/commit your configuration to `main`; GitHub Pages will publish the change. For later Apps Script edits, create a new deployment version as Google requires.
+11. After tests, merge the GitHub PR/commit your configuration to `main`; GitHub Pages will publish the change. For later Apps Script edits, select a new deployment version as Google requires.
 
 **Keep the deployment script editable only by the instructor.** Do not put the HMAC secret, private roster contents, full student list, or account credentials in GitHub files.
 
@@ -47,7 +47,7 @@ This is **automatic roster matching, NOT verified email ownership**. An unauthor
 
 ## Passcode safety
 
-The student chooses a **new, non-reused passcode of 16+ characters**. Column G retains the existing header `Passcode`, but stores `hmac256$v1$<random salt>$<digest>`, **never the readable passcode**. The server's independent HMAC secret is stored in Apps Script Script Properties and is not accessible to students through the web page. This salted keyed hash is adequate only as a **limited-purpose access token representation** with high-entropy passcodes; it is *not* an Argon2id/scrypt password hash for general account login. Do not reuse Google or social-media passwords. A future account login system requires a proper slow password KDF, secure session controls, recovery and improved identity proofing.
+The student chooses a **new, non-reused passcode of at least 8 characters**. Column G retains the existing header `Passcode`, but stores `hmac256$v1$<random salt>$<digest>`, **never the readable passcode**. The server's independent HMAC secret is stored in Apps Script Script Properties and is not accessible to students through the web page. This salted keyed hash is adequate only as a **limited-purpose access token representation** with high-entropy passcodes; it is *not* an Argon2id/scrypt password hash for general account login. **Eight characters is a minimum, not a recommended target.** Prefer a longer, randomly generated passcode that is hard to guess. Do not reuse Google or social-media passwords. A future account login system requires a proper slow password KDF, secure session controls, recovery and improved identity proofing.
 
 ## Integrity and privacy safeguards
 
@@ -70,6 +70,18 @@ node --test tests/cet154-registration.test.mjs
 ```
 
 The first command uses fictional names and a simulated Sheet to test name matching, duplicate registration, partial records, validation, and passcode protection. These tests do not prove that the Apps Script deployment has been authorized or configured; **live deployment requires the instructor setup above**.
+
+
+## Updating an existing Apps Script deployment for the 8-character minimum
+
+Both `Code.gs` (server-side validation) and `Index.html` (the form's `minlength` and placeholder) changed from a 16-character minimum to **8 characters**. **Publishing to GitHub does not update Apps Script automatically.**
+
+1. From the private student registry, select **Extensions → Apps Script**.
+2. Replace the contents of **both** `Code.gs` and the `Index` HTML file using the newly published GitHub versions.
+3. Save the Apps Script project.
+4. If not previously deployed, follow the initial deployment steps above. If already deployed, select **Deploy → Manage deployments**, edit the existing web app deployment, select **Version → New version**, and deploy. This preserves the existing deployment URL.
+5. Check that a 7-character passcode is rejected and an exactly 8-character passcode satisfies length validation, using fictional data for UI checks. For a full test submission, use only an instructor-authorized test row; never use a real student's unclaimed row.
+6. Back in VS Code, run `git fetch origin`, `git switch main` and `git pull --ff-only origin main` after the GitHub update. The deployment URL configuration needs changing only if its URL changes.
 
 ## Do not enable until ready
 
