@@ -4,6 +4,8 @@
  * This file contains NO real student names and performs NO spreadsheet writes.
  * It belongs behind a trusted server, never imported by the public enrollment page.
  * A successful roster match is NOT identity proof or permission to log in.
+ * Only a trusted instructor review may approve the applicant.
+ * Never return the roster details to a public browser.
  */
 const normal = (value) => String(value ?? '').normalize('NFKC').trim().replace(/\s+/gu, ' ').toLocaleUpperCase('en');
 export const REQUIRED_ROSTER_HEADERS = Object.freeze([
@@ -50,11 +52,12 @@ export function matchPrivateRoster(tabs, { section, familyName, givenName }) {
       matches.push({rowNumber:rowOffset + 2, studentId:row[0], email:row[1], familyName:row[2], givenName:row[3]});
   });
   if (matches.length !== 1) return {status:'REVIEW_REQUIRED',reason:matches.length?'AMBIGUOUS':'NOT_FOUND'};
-  return {status:'ELIGIBLE_PENDING_EMAIL_VERIFICATION',section:selected,internalMatch:matches[0]};
+  return {status:'ELIGIBLE_PENDING_INSTRUCTOR_REVIEW',section:selected,internalMatch:matches[0]};
 }
 
 /** Public-facing wording must be generic for all identity/roster failures. */
 export function safeUserMessage(status) {
-  if(status === 'VERIFIED_AND_REGISTERED') return 'Your enrollment is verified. You may sign in once student account access is enabled.';
+  if(status === 'APPROVED') return 'Your enrollment is approved. Student sign-in will be available once account access is enabled.';
+  if(status === 'PENDING_INSTRUCTOR_REVIEW') return 'Your enrollment request is pending face-to-face verification by your instructor.';
   return 'We could not complete your enrollment verification. Please contact your instructor.';
 }
