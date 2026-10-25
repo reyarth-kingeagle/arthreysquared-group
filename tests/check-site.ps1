@@ -28,6 +28,7 @@ foreach ($file in $files) {
     foreach ($match in [regex]::Matches($html, $pattern)) {
         $url = [Net.WebUtility]::HtmlDecode($match.Groups['url'].Value.Trim())
         if (-not $url) { continue }
+        if ($label -eq 'account.html' -and $url -match '(?i)drive\.google\.com') { $failures.Add("Private Drive links do not belong on the public student account page: $label"); continue }
         if ($url -match '^javascript:') { $failures.Add("Unsafe javascript link: $label $url"); continue }
         if ($url -match '^[A-Za-z][A-Za-z0-9+.-]*:' -or $url.StartsWith('//')) {
             if (($label -eq 'coursework.html' -or $label.StartsWith('Coursework/')) -and $url -match '^https?://(?:www\.)?drive\.google\.com/?(?:\?.*)?$') { $failures.Add("Placeholder Drive homepage: $label") }
