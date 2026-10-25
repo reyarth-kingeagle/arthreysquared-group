@@ -55,6 +55,12 @@ function updateSelectedCourse(){
     }
   } catch (_) { /* Unconfigured URL keeps this page as a non-submitting preview. */ }
   const active = isCet154 && Boolean(liveUrl);
+  const cardHeading = document.querySelector('.enrollment-card-heading p');
+  if (cardHeading) cardHeading.textContent = active
+    ? 'CET154 registration is available using the Google-hosted form below. The registration form checks your selected section and official student roster.'
+    : 'Explore the form layout using imaginary student details only. Fields marked * are required for the design check.';
+  document.title = active ? 'CET154 Student Registration | ARTHREYSQUARED Group' : 'Subject Enrollment Preview | ARTHREYSQUARED Group';
+
   const launch = get('cet154-live-registration');
   const link = get('cet154-live-link');
   if (launch) launch.hidden = !active;

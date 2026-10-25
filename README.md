@@ -39,17 +39,17 @@ git status
 .\tests\check-site.ps1
 ```
 
-Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/coursework.html and select **Enroll Now** on a subject. Review `enrollment.html` on desktop and mobile. For a direct CET154 design preview visit https://www.arthreysquared.com/enrollment.html?subject=msuiit-cet154.
+Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/coursework.html and select **Enroll Now** on a subject. Review `enrollment.html` on desktop and mobile. For CET154 enrollment, visit https://www.arthreysquared.com/enrollment.html?subject=msuiit-cet154 and select Open CET154 Registration.
 
 ### Future security requirements
 
-Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Do not enter or solicit genuine student IDs, institutional emails, or passwords on the current design-preview form.**
+Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Never enter genuine student details into a design-preview form; for CET154 use only the confirmed Google-hosted registration application after a controlled test.**
 
-## CET154 private roster registration — prepared but not deployed
+## CET154 private roster registration — website link activated
 
 The repository now includes a Google Apps Script student registration service in `apps-script/cet154-registration/`. It checks Family Name + Given Name in the selected private roster tab, requires all other registration fields initially blank, and updates the existing student row only once. Repeated complete records are rejected as already registered; missing and partial cases refer to the instructor. The existing Section tabs are recognized dynamically from the private Sheet.
 
-**Important:** This is **not live** yet. The Sheet owner must create/deploy the bound Apps Script web app, test it, and add the actual deployment URL to `js/cet154-registration-config.js` before the CET154 enrollment button launches the Google-hosted form. Do not enter student information into the current preview until live activation. See `apps-script/cet154-registration/SETUP.md`.
+**Website link activated:** The instructor's GitHub commit supplied a concrete Google Apps Script `/exec` URL. The website configuration now uses that exact value and shows **Open CET154 Registration** instead of a non-submitting preview. Actual deployment availability and private Sheet writes could not be independently verified in this environment. Before inviting students, the instructor should verify that the link opens the correct form and try an explicitly authorized test row. See `apps-script/cet154-registration/SETUP.md`. The registry was not modified by this GitHub change.
 
 No real student names, credentials, HMAC secret, or private spreadsheet ID are stored in public GitHub source. The Google Sheet is unchanged. Students remain able to access public coursework without enrollment.
 
@@ -57,7 +57,7 @@ A roster-name match is **not proof of identity or verified email ownership**. St
 
 ## Current student access
 
-Lessons and handouts are public and do not require an account. No active student account creation, secure sign-in, registration storage, protected quiz, results dashboard, or Supabase database integration is present in the **published main branch**. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
+Lessons and handouts are public and do not require an account. The published site links to a Google Apps Script CET154 enrollment application; its live availability and Sheet writes still require an instructor-side check. Secure account sign-in, protected quizzes, results dashboards and Supabase integration are not provided on the published site. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
 
 The separate **CET154 OBE-CQI prototype** is still under development on `feature/obe-cqi-blueprint-builder`. It is not yet approved/merged and should not be interpreted as operational grading or Google Sheets synchronization. Any eventual account system must use secure authentication, verify students and map scores through immutable student identifiers.
 
