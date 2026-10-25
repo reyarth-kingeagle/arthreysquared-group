@@ -35,6 +35,15 @@ function updateSelectedCourse(){
   back.href=course?course.page:'coursework.html';
   help.textContent=course?.domain?'Use your '+course.institution+' institutional email ending in @'+course.domain+'. Section must match your official class assignment.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
   get('enroll-email').placeholder=course?.domain?'student@'+course.domain:'Institutional email address';
+  const cet154 = course?.id === 'msuiit-cet154';
+  const middleLabel = get('enroll-middle-label');
+  const middleInput = get('enroll-middle');
+  if (middleLabel) middleLabel.firstChild.nodeValue = cet154 ? 'Middle Name ' : 'Middle Initial ';
+  middleInput.maxLength = cet154 ? 80 : 2;
+  middleInput.placeholder = cet154 ? 'Your full middle name' : 'e.g., M.';
+  const rosterNotice = get('cet154-roster-notice');
+  if (rosterNotice) rosterNotice.hidden = !cet154;
+
 }
 dropdown.addEventListener('change',()=>{updateSelectedCourse();message.textContent='';});
 updateSelectedCourse();
