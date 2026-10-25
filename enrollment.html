@@ -45,6 +45,12 @@
           <p>Registration is not open. This page does not create an account, send your information, save a password, or update Google Sheets. Do not enter genuine student IDs or passwords.</p>
         </div>
 
+        <div id="cet154-live-registration" class="enrollment-preview-notice" hidden>
+          <strong>CET154 official enrollment</strong>
+          <p>Complete CET154 enrollment through the Google-hosted registration form. Your name and section are checked against the instructor's private student registry. Only a matching, incomplete row is filled.</p>
+          <a class="btn btn-primary" id="cet154-live-link" href="#" rel="noopener noreferrer">Open CET154 Registration</a>
+          <p class="enrollment-hint">An existing complete record cannot be registered again. Students not found in the roster should contact their instructor for re-verification.</p>
+        </div>
         <!-- Deliberately not an HTML form: there is no action, submit request, or password transmission. -->
         <div id="enrollment-fields" class="enrollment-fields" role="group" aria-label="Enrollment design preview">
           <div class="enrollment-section-label"><span>01</span><h3>Course information</h3></div>
@@ -77,7 +83,7 @@
           </div>
           <div class="enrollment-two">
             <div class="enrollment-field">
-              <label for="enroll-middle">Middle Initial <span aria-hidden="true">*</span></label>
+              <label id="enroll-middle-label" for="enroll-middle">Middle Initial <span aria-hidden="true">*</span></label>
               <input id="enroll-middle" type="text" maxlength="2" required autocomplete="off" placeholder="e.g., M." />
             </div>
             <div class="enrollment-field">
