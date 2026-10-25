@@ -49,7 +49,7 @@ foreach ($file in $files) {
         }
     }
 }
-$required = @('index.html','coursework.html','styles.css','script.js','account.html','quiz.html','results.html','instructor.html','js/config.js','assets/rey-arth-rublico.jpg')
+$required = @('index.html','coursework.html','styles.css','script.js','assets/logo.png','assets/rey-arth-rublico.jpg')
 foreach ($name in $required) {
     if (-not (Test-ExactPath ([IO.Path]::GetFullPath((Join-Path $root $name))))) { $failures.Add("Missing required file: $name") }
 }
@@ -66,4 +66,24 @@ if ($failures.Count) {
     throw "$($failures.Count) static checks failed."
 }
 Write-Output "PASS: $($files.Count) HTML files, $checked internal references, and $($subjects.Count) subject pages checked with exact path case."
-Write-Output 'Static checks do not exercise a configured Supabase database or live email delivery.'
+# Guard against accidental re-introduction of old Supabase login and links.
+$legacyPages = @('account.html','quiz.html','results.html','instructor.html')
+foreach ($page in $legacyPages) {
+    if (Test-Path -LiteralPath (Join-Path $root $page)) { $failures.Add("Old account page should not be in published main: $page") }
+}
+$publishedScriptFiles = @('js/app.js','js/account.js','js/config.js','js/core.js','js/instructor.js','js/quiz.js','js/results.js','js/return-url.js')
+foreach ($path in $publishedScriptFiles) {
+    if (Test-Path -LiteralPath (Join-Path $root $path)) { $failures.Add("Old Supabase module should not be in published main: $path") }
+}
+$checkHtml = @(Get-ChildItem -LiteralPath $root -Filter '*.html' -File -Recurse)
+foreach ($page in $checkHtml) {
+    $html = [IO.File]::ReadAllText($page.FullName)
+    if ($html -match '(?i)(account\.html|js/app\.js|data-account-controls|data-enroll|supabase)') {
+        $failures.Add("Retired account integration detected: $($page.FullName)")
+    }
+}
+if ($failures.Count) {
+    $failures | ForEach-Object { Write-Output "FAIL: $_" }
+    throw "$($failures.Count) static checks failed."
+}
+Write-Output 'Legacy Supabase and account references: none found in published HTML.'
