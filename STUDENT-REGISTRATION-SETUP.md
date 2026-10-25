@@ -1,69 +1,25 @@
-# ARTHREYSQUARED Student Account — Website UI Pilot
+# Student Enrollment Setup
 
-## Why the old Supabase sign-in is still on the public website
+## Current website behavior
 
-The public site is built from GitHub branch `main`, while the cleanup and new account design live on `feature/obe-cqi-blueprint-builder` in an **unmerged draft pull request**. Once the PR is reviewed and merged, the old Supabase pages and scripts disappear from the deployed site.
+Every subject page now has an **Enroll in this subject** link. It opens `account.html` with that subject selected. The form collects surname, given name, middle name, student ID, email, section, password, and password confirmation. It checks that the two password entries match, and MSU-IIT course enrollment requires an `@g.msuiit.edu.ph` email.
 
-## What is available on the feature branch
+The site is a static GitHub Pages website. The form currently performs browser-side checks only: it does **not** submit or save student information, create an account, or connect to Google Sheets. It clears the password fields after local validation. Do not use real student data until the backend is deployed.
 
-- New native website page: `account.html`. Registration and sign-in views use the existing navy/teal/gold brand and mobile-responsive layout.
-- All 11 actual subject pages now link to the same account page with their own subject ID.
-- Students can select a subject and enter family name, given name, middle initial, ID number, email, section, and a passcode with confirmation.
-- CET154 uses the institutional email format `@g.msuiit.edu.ph` for client-side guidance. School email ownership cannot be verified just by matching the suffix.
-- Sign-in view shows email + passcode fields. Forgotten passcodes require a credential-only reset, never deletion of student records or marks.
-- Form UI validates fields and **does not send, store or log passcodes or personal information**. Until a vetted authentication backend is live, both submit buttons clearly indicate preview mode.
-- The public course catalog lists all 11 existing subject IDs.
-- Pure future grading utilities in `js/student-record-model.mjs` demonstrate surname/given name sorting of complete records and matching scores by permanent `studentUid` rather than by row number.
-- The existing private CET154 master spreadsheet remains in the instructor-only LMS Drive folder. No real registration rows or scores have been written.
+## Google Drive destination
 
-## Important: what is NOT implemented yet
+Use the instructor-controlled folder supplied for enrollment data:
 
-The website frontend **cannot safely verify passcodes by reading Google Sheets directly**. GitHub Pages is static and cannot keep private credentials. This means the current registration UI is intentionally inactive.
+<https://drive.google.com/drive/folders/1czVh-IBsB-TqbVhzsMLvxj5iy4DvdHSV?usp=drive_link>
 
-The next technical milestone is an **authenticated server-side account service** with:
+This is a folder link, not a Google Sheet link. Create the enrollment spreadsheet inside that folder and keep it restricted to authorized staff. No sheet has been created or connected by this repository.
 
-1. Course/section whitelist and institutional email verification or instructor confirmation before account activation;
-2. Strong passcode storage (per-account salt, established password hashing such as Argon2id/scrypt/bcrypt or equivalent), never plaintext in Google Sheets;
-3. Rate limiting, safe login/session management, recovery, audit, duplicate-email/ID checks and anti-abuse controls;
-4. Instructor-controlled read/write access to the owner-only private Google Sheets files (no publicly editable student roster);
-5. Permanent student UID joining Section Student Dataset, Score Ledger and Grading System, so late alphabetical insertions do not move scores to another student.
+## To make enrollment functional
 
-Google Apps Script can automate the Sheets/Drive operations. Its HTML Service is **not** a secure direct browser-to-Sheets password database. An Apps Script web app with a controlled authentication implementation, or another appropriately authenticated server, must be designed and live-tested. The previous Google Forms pilot has been retired; no Google Form is needed for the website registration UX.
+1. Create a Google Sheet inside the folder with columns for student UID, subject, surname, given name, middle name, student ID, email, section, and enrollment timestamp. Do not add a password column.
+2. Use Supabase Auth (or another maintained authentication provider) to receive and hash passwords. Never send a password to Google Sheets, client-side JavaScript, Apps Script logs, or GitHub.
+3. Add a server-side endpoint (for example, a Supabase Edge Function) that validates the subject and institutional email, authenticates the student, checks duplicate IDs/emails, and appends only the student profile/enrollment metadata to the restricted sheet using a server-held Google service credential.
+4. Add email verification, rate limiting, safe error handling, and access controls before enabling real registration. Keep all service credentials out of this repository and browser bundle.
+5. Configure the endpoint URL and public auth key in the client, then enable submissions only after testing with dummy records and confirming that password values never reach Sheets or logs.
 
-## Synchronize changes from GitHub to VS Code
-
-Open VS Code in your `arthreysquared-group` folder. Open Terminal > New Terminal. Before any fetch, run:
-
-    git status
-
-If you have local uncommitted work, commit or back it up before switching branches. Then:
-
-    git fetch origin
-    git switch feature/obe-cqi-blueprint-builder
-    git pull --ff-only origin feature/obe-cqi-blueprint-builder
-    git status
-
-For a first-time branch checkout, if needed:
-
-    git switch --track origin/feature/obe-cqi-blueprint-builder
-
-## Preview and test
-
-Open `account.html` with VS Code Live Server. Toggle Create account / Sign in and select CET154; enter **fictitious data only**. The confirmation says no account was created. Test any other subject's course page buttons; they should open the matching subject preselected in `account.html`.
-
-For local tests with Node.js and PowerShell:
-
-    node --test tests/student-record-model.test.mjs
-    node --test tests/blueprint.test.mjs
-    .\tests\check-site.ps1
-
-No form should claim success or accept real student information until the secured backend is implemented. Use no real student passcodes or personal information in preview tests.
-
-## Publishing the new design
-
-The project remains on a draft feature branch. After reviewing and testing Pull Request #1, it must be marked ready and merged to `main` to change the public website. Once merged, update your local production branch:
-
-    git switch main
-    git pull --ff-only origin main
-
-A successful pull updates local VS Code files, while GitHub Pages publishes from its configured branch. Changes committed by the assistant directly to GitHub are already remote and do not need `git add`, `git commit`, or `git push` from your PC.
+The provided Drive URL is the data destination. This code change cannot create a live spreadsheet or securely connect Google credentials without access to the Drive account and a deployed backend.

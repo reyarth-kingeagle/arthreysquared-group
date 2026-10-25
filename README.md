@@ -15,8 +15,8 @@ A static GitHub Pages educational website for the ARTHREYSQUARED Learning Hub, t
 - `js/course-builder.js`, `js/blueprint-model.mjs` — editable modules, ILO/CO mapping, assessment allocation, and validation.
 - `BLUEPRINT-SETUP.md` — blueprint editor usage, current limits, and future integration notes.
 - `tests/` — static link checks, blueprint model tests, and student UID/grade alignment tests.
-- `account.html`, `account.css`, and `js/student-account.js` — native website account design (preview, not active registration).
-- `STUDENT-REGISTRATION-SETUP.md` — on-site account preview, Git synchronization and security/backend rollout requirements.
+- `account.html`, `account.css`, and `js/student-account.js` — subject enrollment form (browser validation only; no data submission yet).
+- `STUDENT-REGISTRATION-SETUP.md` — current enrollment limits and secure Google Sheets integration steps.
 
 ## Start in VS Code
 
@@ -29,7 +29,7 @@ A static GitHub Pages educational website for the ARTHREYSQUARED Learning Hub, t
 
 Public coursework remains available with no sign-in. The OBE-CQI blueprint editor runs entirely in your browser, saves local drafts, and exports JSON and CSV blueprints. It is **not an authenticated instructor portal**. Do not put private syllabi, student identities, grades, passwords, or answer keys in the editor.
 
-An ARTHREYSQUARED-branded account registration/sign-in **website UI** is implemented in preview mode; it never saves or transmits credentials or creates accounts yet. Registration will eventually write to private subject/section Google Sheets through a secure instructor-controlled backend with password hashing, email/identity verification, rate limits and audit. Real registration, protected quizzes, official grading/CO attainment, and PDF reports are not yet active. No Supabase integration or SMTP setup is needed for the current static site.
+Each subject page links to an enrollment form. The static site checks required fields, confirms matching passwords, and checks the MSU-IIT email suffix, but does not save or transmit enrollment details. No Google Sheets or authentication backend is connected. To activate enrollment, use a secure authentication provider and server-side Sheets integration; passwords must never be written to a sheet. See `STUDENT-REGISTRATION-SETUP.md`. Protected quizzes, official grading/CO attainment, and PDF reports are not active.
 
 ## Development checks
 
