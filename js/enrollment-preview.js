@@ -33,9 +33,11 @@ function updateSelectedCourse(){
   schoolName.textContent=course?course.institution:'MSU-IIT or St. Peter’s College';
   back.textContent=course?'← Back to '+course.code:'← Back to courses';
   back.href=course?course.page:'coursework.html';
-  help.textContent=course?.domain?'Use your '+course.institution+' institutional email ending in @'+course.domain+'. For CET154, your instructor will verify your ID, school email and section face-to-face.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
+  help.textContent=course?.id==='msuiit-cet154'?'Use your MSU-IIT institutional email ending in @g.msuiit.edu.ph. Your instructor will verify your ID, school email and section face-to-face.':course?.domain?'Use your institution-approved @'+course.domain+' email. Instructor verification rules for this subject will be confirmed later.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
   get('enroll-email').placeholder=course?.domain?'student@'+course.domain:'Institutional email address';
   const cet154 = course?.id === 'msuiit-cet154';
+  const emailHelp = get('email-help');
+  if (emailHelp) emailHelp.textContent = cet154 ? 'Your CET154 instructor will confirm the institutional email in person. Typing it here does not verify it.' : 'Email verification for this subject is not active yet; submitting an address does not verify it.';
   const emailLabel = get('enroll-email-label');
   if (emailLabel) emailLabel.firstChild.nodeValue = cet154 ? 'Institutional Email (instructor review pending) ' : 'Verified Email ';
   const middleLabel = get('enroll-middle-label');
