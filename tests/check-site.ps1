@@ -49,7 +49,7 @@ foreach ($file in $files) {
         }
     }
 }
-$required = @('index.html','coursework.html','styles.css','script.js','assets/logo.png','assets/rey-arth-rublico.jpg')
+$required = @('index.html','coursework.html','enrollment.html','enrollment.css','js/enrollment-preview.js','styles.css','script.js','assets/logo.png','assets/rey-arth-rublico.jpg')
 foreach ($name in $required) {
     if (-not (Test-ExactPath ([IO.Path]::GetFullPath((Join-Path $root $name))))) { $failures.Add("Missing required file: $name") }
 }
@@ -60,6 +60,20 @@ foreach ($file in $subjects) {
     if ($text -notmatch '(?i)Back to Student Portal') { $failures.Add("Missing portal return link: $($file.Name)") }
     if ($text -notmatch '(?i)<h1\b') { $failures.Add("Missing subject heading: $($file.Name)") }
     if ($text -notmatch '(?i)<noscript\b') { $failures.Add("Missing JavaScript fallback note: $($file.Name)") }
+}
+# Every course and every subject page must expose an optional enrollment preview link.
+$portal = [IO.File]::ReadAllText((Join-Path $root 'coursework.html'))
+$portalLinks = [regex]::Matches($portal, 'href="enrollment\.html\?subject=').Count
+if ($portalLinks -ne 11) { $failures.Add("Expected 11 course enrollment buttons but found $portalLinks") }
+foreach ($subject in $subjects) {
+    $sourceText = [IO.File]::ReadAllText($subject.FullName)
+    if ($sourceText -notmatch 'href="../../enrollment\.html\?subject=') {
+        $failures.Add("Missing Enroll Now link: $($subject.Name)")
+    }
+}
+$preview = [IO.File]::ReadAllText((Join-Path $root 'js/enrollment-preview.js'))
+if ($preview -match '(?i)\b(fetch|XMLHttpRequest|localStorage|sessionStorage|indexedDB)\s*[\(.]') {
+    $failures.Add('Enrollment preview must not transmit or persist personal data')
 }
 if ($failures.Count) {
     $failures | ForEach-Object { Write-Output "FAIL: $_" }

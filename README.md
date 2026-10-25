@@ -17,6 +17,29 @@ Public educational website for the ARTHREYSQUARED Learning Hub, tutorials, publi
 - `assets/`: official logo and instructor profile picture
 - `tests/check-site.ps1`: static reference, subject and legacy-account cleanup checks
 
+## New optional enrollment design — development preview
+
+The branch `feature/course-enrollment-ui-preview` adds `enrollment.html` and an **Enroll Now** link for each of the 11 existing subjects. Students can still open any course and read public lessons and handouts without signing up.
+
+When a student selects Enroll Now, the subject is preselected, and the interface displays Student ID Number, Verified Email (not verified yet), Family Name, Given Name, Middle Initial, Section, Password, and Retype Password.
+
+**Design only.** No form submission, account creation, Google Sheets write, credential storage, or email verification is implemented. Use fictitious data for previews. The preview uses a non-submitting field group and JavaScript field checks, clearing entries immediately after a successful check.
+
+### Update VS Code for this preview
+
+```powershell
+git status
+git fetch origin
+git switch feature/course-enrollment-ui-preview
+git pull --ff-only origin feature/course-enrollment-ui-preview
+git status
+.\tests\check-site.ps1
+```
+
+Save or commit unrelated local changes before switching branches. If the new branch is not yet known locally, use `git switch --track origin/feature/course-enrollment-ui-preview` after `git fetch origin`.
+
+Open `coursework.html` with Live Server and click **Enroll Now** on a course card. Then inspect `enrollment.html` on both phone-sized and desktop screens.
+
 ## Current student access
 
 Lessons and handouts are public and do not require an account. No active student sign-in, registration, protected quiz, results dashboard, or Supabase database integration is present in the **published main branch**. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
