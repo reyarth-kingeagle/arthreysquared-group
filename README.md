@@ -43,13 +43,13 @@ Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/
 
 ### Future security requirements
 
-Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Do not enter or solicit genuine student IDs, institutional emails, or passwords on the current design-preview form.**
+Making student registration functional will require a protected server-side service, face-to-face instructor identity/email checks, securely hashed-password storage, session and rate-limit controls, and private Google Sheets integration. **Do not enter or solicit genuine student IDs, institutional emails, or passwords on the current design-preview form.**
 
 ## CET154 roster eligibility — next development phase
 
-CET154 has an instructor-owned, **private** student registry with currently recognized section tabs `H1W23` and `H1M23`. We have implemented a policy draft that matches complete Family Name + Given Name within an exact section and marks unmatched or duplicate names for instructor review. A roster match **alone** never activates an account; the student must still verify email ownership.
+CET154 has an instructor-owned, **private** student registry with currently recognized section tabs `H1W23` and `H1M23`. We have implemented a policy draft that matches complete Family Name + Given Name within an exact section and marks unmatched or duplicate names for instructor review. A roster match **alone** never activates an account; the instructor must verify the student ID, section and institutional email face-to-face. No emailed one-time code is required.
 
-See `CET154-REGISTRATION-PHASE1.md` for the safe phased rollout, private-sheet tab conventions, and password-handling requirements. The pure roster matching policy is located in `server/cet154-roster-policy.mjs`, with synthetic tests in `tests/cet154-roster-policy.test.mjs`. No real roster, credentials, Google Sheets integration, or live account registration is included in this branch.
+See `CET154-REGISTRATION-PHASE1.md` for the safe phased rollout, private-sheet tab conventions, and password-handling requirements. The pure roster matching policy is located in `server/cet154-roster-policy.mjs`, with synthetic tests in `tests/cet154-roster-policy.test.mjs`. No real roster, plaintext credentials, Google Sheets write integration, or live account registration is included in this branch. The private Google Sheet remains the intended source of truth.
 
 ## Current student access
 
