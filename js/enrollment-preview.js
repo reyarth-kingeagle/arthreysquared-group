@@ -1,6 +1,7 @@
 // UI DESIGN ONLY. No network requests, form submissions, browser storage, or authentication.
 // Later phases must verify institutional email/section, store credentials securely on the
 // server, and keep student academic data in instructor-only private Google Sheets.
+import { CET154_REGISTRATION_WEB_APP_URL } from './cet154-registration-config.js';
 export const SUBJECTS = Object.freeze([
   {id:'msuiit-cet111',code:'CET 111',title:'Architectural Drafting',institution:'MSU-IIT',domain:'g.msuiit.edu.ph',page:'Coursework/MSU-IIT/cet111.html'},
   {id:'msuiit-cet134',code:'CET 134',title:'Formworks and Scaffoldings',institution:'MSU-IIT',domain:'g.msuiit.edu.ph',page:'Coursework/MSU-IIT/cet134.html'},
@@ -35,6 +36,30 @@ function updateSelectedCourse(){
   back.href=course?course.page:'coursework.html';
   help.textContent=course?.domain?'Use your '+course.institution+' institutional email ending in @'+course.domain+'. Section must match your official class assignment.':'Use the institution-approved email address. Your section will be checked by the instructor in a later phase.';
   get('enroll-email').placeholder=course?.domain?'student@'+course.domain:'Institutional email address';
+  const isCet154 = course?.id === 'msuiit-cet154';
+  const middleLabel = get('enroll-middle-label');
+  if (middleLabel) middleLabel.firstChild.nodeValue = isCet154 ? 'Middle Name ' : 'Middle Initial ';
+  const middleInput = get('enroll-middle');
+  middleInput.maxLength = isCet154 ? 120 : 2;
+  middleInput.placeholder = isCet154 ? 'Your full middle name' : 'e.g., M.';
+  let liveUrl = null;
+  try {
+    if (CET154_REGISTRATION_WEB_APP_URL) {
+      const candidate = new URL(CET154_REGISTRATION_WEB_APP_URL);
+      if (candidate.protocol === 'https:' && candidate.hostname === 'script.google.com' &&
+          /^\\/macros\\/s\\/[^/]+\\/exec$/.test(candidate.pathname)) liveUrl = candidate.href;
+    }
+  } catch (_) { /* Unconfigured URL keeps this page as a non-submitting preview. */ }
+  const active = isCet154 && Boolean(liveUrl);
+  const launch = get('cet154-live-registration');
+  const link = get('cet154-live-link');
+  if (launch) launch.hidden = !active;
+  if (link && active) link.href = liveUrl;
+  const preview = get('enrollment-fields');
+  if (preview) preview.hidden = active;
+  const previewNotice = document.querySelector('.enrollment-card > .enrollment-preview-notice:not(#cet154-live-registration)');
+  if (previewNotice) previewNotice.hidden = active;
+
 }
 dropdown.addEventListener('change',()=>{updateSelectedCourse();message.textContent='';});
 updateSelectedCourse();
