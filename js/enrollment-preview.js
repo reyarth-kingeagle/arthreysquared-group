@@ -47,7 +47,7 @@ function updateSelectedCourse(){
     if (CET154_REGISTRATION_WEB_APP_URL) {
       const candidate = new URL(CET154_REGISTRATION_WEB_APP_URL);
       if (candidate.protocol === 'https:' && candidate.hostname === 'script.google.com' &&
-          /^\\/macros\\/s\\/[^/]+\\/exec$/.test(candidate.pathname)) liveUrl = candidate.href;
+          candidate.pathname.startsWith('/macros/s/') && candidate.pathname.endsWith('/exec')) liveUrl = candidate.href;
     }
   } catch (_) { /* Unconfigured URL keeps this page as a non-submitting preview. */ }
   const active = isCet154 && Boolean(liveUrl);
