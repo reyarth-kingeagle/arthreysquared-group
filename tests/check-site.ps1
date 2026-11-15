@@ -49,55 +49,46 @@ foreach ($file in $files) {
         }
     }
 }
-$required = @('index.html','coursework.html','enrollment.html','enrollment.css','js/enrollment-preview.js','styles.css','script.js','assets/logo.png','assets/rey-arth-rublico.jpg')
+$required = @('index.html','coursework.html','enrollment.html','privacy.html','styles.css','script.js','assets/logo.png','assets/rey-arth-rublico.jpg')
 foreach ($name in $required) {
     if (-not (Test-ExactPath ([IO.Path]::GetFullPath((Join-Path $root $name))))) { $failures.Add("Missing required file: $name") }
 }
 $subjectPrefix = (Join-Path $root 'Coursework') + [IO.Path]::DirectorySeparatorChar
 $subjects = @($files | Where-Object { $_.FullName.StartsWith($subjectPrefix,[StringComparison]::Ordinal) })
+if ($subjects.Count -ne 11) { $failures.Add("Expected 11 public subject pages, found $($subjects.Count)") }
 foreach ($file in $subjects) {
-    $text = [IO.File]::ReadAllText($file.FullName)
-    if ($text -notmatch '(?i)Back to Student Portal') { $failures.Add("Missing portal return link: $($file.Name)") }
-    if ($text -notmatch '(?i)<h1\b') { $failures.Add("Missing subject heading: $($file.Name)") }
-    if ($text -notmatch '(?i)<noscript\b') { $failures.Add("Missing JavaScript fallback note: $($file.Name)") }
+    $page = [IO.File]::ReadAllText($file.FullName)
+    if ($page -notmatch '(?i)Back to Learning Hub') { $failures.Add("Missing Learning Hub return link: $($file.Name)") }
+    if ($page -notmatch '(?i)<h1\b') { $failures.Add("Missing subject heading: $($file.Name)") }
+    if ($page -notmatch '(?i)<noscript\b') { $failures.Add("Missing JavaScript fallback note: $($file.Name)") }
+    if ($page -notmatch 'href="../../privacy\.html"') { $failures.Add("Missing privacy link: $($file.Name)") }
 }
-# Every course and every subject page must expose an optional enrollment preview link.
 $portal = [IO.File]::ReadAllText((Join-Path $root 'coursework.html'))
-$portalLinks = [regex]::Matches($portal, 'href="enrollment\.html\?subject=').Count
-if ($portalLinks -ne 11) { $failures.Add("Expected 11 course enrollment buttons but found $portalLinks") }
-foreach ($subject in $subjects) {
-    $sourceText = [IO.File]::ReadAllText($subject.FullName)
-    if ($sourceText -notmatch 'href="../../enrollment\.html\?subject=') {
-        $failures.Add("Missing Enroll Now link: $($subject.Name)")
-    }
-}
-$preview = [IO.File]::ReadAllText((Join-Path $root 'js/enrollment-preview.js'))
-if ($preview -match '(?i)\b(fetch|XMLHttpRequest|localStorage|sessionStorage|indexedDB)\s*[\(.]') {
-    $failures.Add('Enrollment preview must not transmit or persist personal data')
-}
-if ($failures.Count) {
-    $failures | ForEach-Object { Write-Output "FAIL: $_" }
-    throw "$($failures.Count) static checks failed."
-}
-Write-Output "PASS: $($files.Count) HTML files, $checked internal references, and $($subjects.Count) subject pages checked with exact path case."
-# Guard against accidental re-introduction of old Supabase login and links.
-$legacyPages = @('account.html','quiz.html','results.html','instructor.html')
-foreach ($page in $legacyPages) {
-    if (Test-Path -LiteralPath (Join-Path $root $page)) { $failures.Add("Old account page should not be in published main: $page") }
-}
-$publishedScriptFiles = @('js/app.js','js/account.js','js/config.js','js/core.js','js/instructor.js','js/quiz.js','js/results.js','js/return-url.js')
-foreach ($path in $publishedScriptFiles) {
-    if (Test-Path -LiteralPath (Join-Path $root $path)) { $failures.Add("Old Supabase module should not be in published main: $path") }
-}
-$checkHtml = @(Get-ChildItem -LiteralPath $root -Filter '*.html' -File -Recurse)
-foreach ($page in $checkHtml) {
+$courseLinks = [regex]::Matches($portal, 'href="Coursework/(?:MSU-IIT|SPC)/[^"]+\.html"').Count
+if ($courseLinks -ne 11) { $failures.Add("Expected 11 Open Course links but found $courseLinks") }
+$forbidden = '(?i)(enrollment\.html\?subject=|course-enroll-btn|subject-enrollment-callout|Enroll Now|script\.google\.com/macros/|<form\b|<input\b[^>]*type\s*=\s*["'']password)'
+foreach ($page in $files) {
     $html = [IO.File]::ReadAllText($page.FullName)
-    if ($html -match '(?i)(account\.html|js/app\.js|data-account-controls|data-enroll|supabase)') {
-        $failures.Add("Retired account integration detected: $($page.FullName)")
-    }
+    if ($html -match $forbidden) { $failures.Add("Student registration interface found: $($page.FullName)") }
+}
+$retiredFiles = @(
+    'enrollment.css',
+    'js/enrollment-preview.js',
+    'js/cet154-registration-config.js',
+    'apps-script/cet154-registration/Code.gs',
+    'apps-script/cet154-registration/Index.html',
+    'apps-script/cet154-registration/SETUP.md',
+    'tests/cet154-registration.test.mjs',
+    'tests/cet154-registration-activation.test.mjs',
+    'account.html','quiz.html','results.html','instructor.html',
+    'js/app.js','js/account.js','js/config.js','js/core.js','js/instructor.js',
+    'js/quiz.js','js/results.js','js/return-url.js'
+)
+foreach ($item in $retiredFiles) {
+    if (Test-Path -LiteralPath (Join-Path $root $item)) { $failures.Add("Retired account or registration file still present: $item") }
 }
 if ($failures.Count) {
     $failures | ForEach-Object { Write-Output "FAIL: $_" }
     throw "$($failures.Count) static checks failed."
 }
-Write-Output 'Legacy Supabase and account references: none found in published HTML.'
+Write-Output "PASS: $($files.Count) HTML files, $checked internal references, $($subjects.Count) public subject pages; no registration forms or retired account files."

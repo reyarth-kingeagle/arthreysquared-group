@@ -1,82 +1,57 @@
 # ARTHREYSQUARED Group Website
 
-Public educational website for the ARTHREYSQUARED Learning Hub, tutorials, publishing, and coursework.
+A public, privacy-first educational website with coursework, instructional resources, tutorials, and publishing information.
 
-- Public site: https://www.arthreysquared.com
-- Hosting: GitHub Pages, published from the **main** branch
-- Custom domain: configured with `CNAME`
+- Website: https://www.arthreysquared.com/
+- Hosting: GitHub Pages; default branch: `main`
+- Custom domain: `CNAME` points to `www.arthreysquared.com`
 
-## Production files
+## What is public
 
-- `index.html`: company homepage, services, publishing and profile
-- `coursework.html`: Student Portal for browsing courses and instructor contact
-- `enrollment.html`, `enrollment.css`, `js/enrollment-preview.js`: public optional-enrollment form design (no backend)
-- `Coursework/MSU-IIT/`: five subject pages and public learning resources
-- `Coursework/SPC/`: six subject pages and public learning resources
-- `styles.css`: responsive brand styles and subject-page layout
-- `script.js`: accessible mobile navigation, subject filters and portal tabs
-- `assets/`: official logo and instructor profile picture
-- `tests/check-site.ps1`: static reference, subject and legacy-account cleanup checks
+- `index.html`: homepage, services, educational publishing, and contact links
+- `coursework.html`: public Learning Hub, course listings, and instructor contact details
+- `Coursework/MSU-IIT/`: five public subject pages
+- `Coursework/SPC/`: six public subject pages
+- `privacy.html`: privacy notice
+- `enrollment.html`: static notice for visitors using old enrollment bookmarks; **no form, script, or personal-data collection**
+- `styles.css`, `script.js`, `assets/`: styles, navigation, and public artwork
+- `tests/check-site.ps1`: checks file links, subject pages, and absence of registration interfaces
 
-## Public optional enrollment design — UI accessible, registration not yet active
+## Student data policy
 
-The website contains `enrollment.html` and an **Enroll Now** link for each of the 11 existing subjects. Students can still open any course and read public lessons and handouts without signing up.
+**No student registration, login, passwords, or academic record collection is offered on this public website.** Educational pages can be browsed without an account. Do not publish student names or rosters, ID numbers, emails, grades, or private Google Sheets here.
 
-When a student selects Enroll Now, the subject is preselected, and the interface displays Student ID Number, Verified Email (not verified yet), Family Name, Given Name, Middle Initial, Section, Password, and Retype Password.
+Official class records and graded assessments must remain in institution-approved services with restricted access. Public learning materials can be shared without requiring student enrollment.
 
-**Design only.** No form submission, account creation, Google Sheets write, credential storage, or email verification is implemented. Use fictitious data for previews. The preview uses a non-submitting field group and JavaScript field checks, clearing entries immediately after a successful check.
+On November 15, 2026 the public enrollment interfaces, CET154 Google Apps Script link/configuration, and retired registration source were removed from the current branch. The old `enrollment.html` URL now shows a non-collecting retirement notice.
 
-### Update VS Code after the public site is published
+**Important:** Removing GitHub files or links does **not** disable an already deployed Google Apps Script web app or revoke its spreadsheet permissions. The owner must separately disable/archive the old CET154 deployment in Google Apps Script and review access to the private student roster. Git history may still contain earlier source code; deleting files from the current branch is not history erasure.
 
-Open the `arthreysquared-group` folder in VS Code and inspect `git status`.
-Commit or back up any local changes before updating. Then run:
+### Retire the old CET154 deployment (owner action required)
+
+1. Open the private CET154 Student Registry Google Sheet while signed in as its owner.
+2. Select **Extensions → Apps Script**.
+3. Open **Deploy → Manage deployments**. Find the deployed registration web app and select **Archive** (or disable/remove it if shown).
+4. Verify that its old `/exec` link no longer accepts registration. Do **not** submit genuine student details to test it.
+5. In the Google Sheet, review **Share** permissions and restrict access to authorized staff. Review any previously submitted records under your institution's data-retention requirements.
+6. If the Apps Script is used for other workflows, do not delete the entire script project; retire only its student-registration deployment.
+
+## Sync with VS Code (Windows PowerShell)
+
+Open the `arthreysquared-group` folder in VS Code. Save or commit your local edits before syncing.
 
 ```powershell
+git status
 git fetch origin
 git switch main
 git pull --ff-only origin main
-git status
 .\tests\check-site.ps1
 ```
 
-Open `coursework.html` with Live Server or visit https://www.arthreysquared.com/coursework.html and select **Enroll Now** on a subject. Review `enrollment.html` on desktop and mobile. For CET154 enrollment, visit https://www.arthreysquared.com/enrollment.html?subject=msuiit-cet154 and select Open CET154 Registration.
+If execution policy blocks the test, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\check-site.ps1` after reviewing the script.
 
-### Future security requirements
+To preview locally, open `index.html` or `coursework.html` using the VS Code Live Server extension. Check the 11 subject links, `privacy.html`, and the old `enrollment.html` notice. For production, verify the live GitHub Pages deployment and check it on desktop and mobile.
 
-Making student registration functional will require an authenticated server-side service, verified email ownership, secure password storage, session and rate-limit controls, instructor-managed sections, and a private class-record database/Sheets integration. **Never enter genuine student details into a design-preview form; for CET154 use only the confirmed Google-hosted registration application after a controlled test.**
+## Development safeguards
 
-## CET154 private roster registration — website link activated
-
-The repository now includes a Google Apps Script student registration service in `apps-script/cet154-registration/`. It checks Family Name + Given Name in the selected private roster tab, requires all other registration fields initially blank, and updates the existing student row only once. Repeated complete records are rejected as already registered; missing and partial cases refer to the instructor. The existing Section tabs are recognized dynamically from the private Sheet.
-
-**Website link activated:** The instructor's GitHub commit supplied a concrete Google Apps Script `/exec` URL. The website configuration now uses that exact value and shows **Open CET154 Registration** instead of a non-submitting preview. Actual deployment availability and private Sheet writes could not be independently verified in this environment. Before inviting students, the instructor should verify that the link opens the correct form and try an explicitly authorized test row. See `apps-script/cet154-registration/SETUP.md`. The registry was not modified by this GitHub change.
-
-No real student names, credentials, HMAC secret, or private spreadsheet ID are stored in public GitHub source. The Google Sheet is unchanged. Students remain able to access public coursework without enrollment.
-
-A roster-name match is **not proof of identity or verified email ownership**. Student emails are format-checked; instructor confirmation or school sign-in is recommended before releasing restricted assessments. No quizzes or assessments are included here.
-
-## Current student access
-
-Lessons and handouts are public and do not require an account. The published site links to a Google Apps Script CET154 enrollment application; its live availability and Sheet writes still require an instructor-side check. Secure account sign-in, protected quizzes, results dashboards and Supabase integration are not provided on the published site. Those obsolete files and links have been removed to prevent misleading sign-in buttons.
-
-The separate **CET154 OBE-CQI prototype** is still under development on `feature/obe-cqi-blueprint-builder`. It is not yet approved/merged and should not be interpreted as operational grading or Google Sheets synchronization. Any eventual account system must use secure authentication, verify students and map scores through immutable student identifiers.
-
-## Update your local VS Code production files
-
-1. Open your existing `arthreysquared-group` folder in VS Code.
-2. In Terminal, run `git status` and save/commit or otherwise back up any unrelated local changes first.
-3. Fetch and update the published branch:
-
-```powershell
-git fetch origin
-git switch main
-git pull --ff-only origin main
-git status
-```
-
-4. Preview `index.html`, `coursework.html`, and any subject page via VS Code Live Server.
-5. Run `./tests/check-site.ps1` in PowerShell to check relative links and ensure retired sign-in components did not return.
-
-## Important
-
-Merging the unfinished OBE-CQI blueprint branch as-is is **not** recommended; review its content and resolve merge conflicts before implementing secure student-registration functionality. The branch should remain available for CET154 development independently of this public-site cleanup.
+Use a feature branch and a pull request for significant changes. Keep `main` deployable. Never add private data, access tokens, or Google Sheet contents to this public repository. Static source and GitHub Pages cannot securely host private student academic records.
