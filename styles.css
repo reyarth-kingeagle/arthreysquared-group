@@ -986,7 +986,8 @@ select {
 
 .profile-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: start;
   gap: 20px;
 }
 
@@ -1010,6 +1011,136 @@ select {
 
 .profile-card li + li {
   margin-top: 6px;
+}
+
+/* Education timeline uses the same navy, teal, gold and card styles as the Learning Hub. */
+.education-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.education-section-header {
+  margin-bottom: 22px;
+}
+
+.education-section-header h3 {
+  margin: 0 0 2px;
+  color: var(--navy);
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.education-section-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.education-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 23px !important;
+  border-left: 2px solid var(--line);
+}
+
+.education-timeline .education-item {
+  position: relative;
+  margin: 0;
+  padding: 0 0 24px 15px;
+  min-width: 0;
+}
+
+.education-timeline .education-item + .education-item {
+  margin-top: 0;
+}
+
+.education-timeline .education-item:last-child {
+  padding-bottom: 0;
+}
+
+.education-timeline .education-item::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: -29px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--white);
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 2px var(--teal);
+}
+
+.education-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px 10px;
+  margin-bottom: 8px;
+}
+
+.education-years {
+  color: var(--blue-dark);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+.education-honor {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e9d6ad;
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: #fbf7ed;
+  color: #765510;
+  font-size: 0.71rem;
+  line-height: 1.25;
+  font-weight: 750;
+}
+
+.education-honor--progress {
+  border-color: #bcded8;
+  background: #f0faf8;
+  color: #0a625c;
+}
+
+.education-item h4 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.01rem;
+  line-height: 1.45;
+  font-weight: 750;
+  overflow-wrap: break-word;
+}
+
+.education-item .education-detail {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 620px) {
+  .education-section {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+  .education-timeline {
+    padding-left: 20px !important;
+  }
+  .education-timeline .education-item {
+    padding-left: 11px;
+    padding-bottom: 22px;
+  }
+  .education-timeline .education-item::before {
+    left: -26px;
+  }
+  .education-item h4 {
+    font-size: 0.97rem;
+  }
 }
 
 /* =========================================================
