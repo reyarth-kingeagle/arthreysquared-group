@@ -7,10 +7,10 @@
 import page from "./app.html";
 
 const IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_IMAGES = 4;
+const MAX_IMAGES = 5;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 16 * 1024 * 1024;
-const MAX_BODY_BYTES = 23 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+const MAX_BODY_BYTES = 29 * 1024 * 1024;
 
 const NO_STORE = {
   "Cache-Control": "no-store, max-age=0, private",
@@ -205,7 +205,7 @@ async function grade(request, env, rubrics) {
   if (selected.some(item => !item)) return json({ error: "Unrecognized essay item." }, 400);
   const images = form?.images;
   if (!Array.isArray(images) || images.length < 1 || images.length > MAX_IMAGES) {
-    return json({ error: "Upload between one and four images." }, 400);
+    return json({ error: "Upload between one and five images." }, 400);
   }
   let totalBytes = 0;
   for (const im of images) {
