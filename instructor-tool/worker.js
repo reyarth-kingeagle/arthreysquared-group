@@ -1,12 +1,10 @@
 /**
  * ARTHREYSQUARED private instructor tool. Deploy separately with Cloudflare Workers.
  * NEVER use GitHub Pages or browser-side API keys for identifiable student papers.
- * This Worker uses server-verified username and access code; the public source has no password.
+ * Open access (no instructor login). API billing is protected only by server-side request limits.
  * Does not persist incoming images, essays, names, or scores.
  */
 import page from "./app.html";
-import loginPage from "./login.html";
-import { hasSession, login, logout } from "./auth.js";
 
 const IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_IMAGES = 5;
@@ -63,6 +61,11 @@ function cleanItems(a) {
 function schema() {
   const obj = (properties, required) => ({ type: "object", properties,
     required, additionalProperties: false });
+  const correction = obj({
+    original: { type: "string" },
+    proposed: { type: "string" },
+    reason: { type: "string" }
+  }, ["original", "proposed", "reason"]);
   const criterion = obj({
     index: { type: "integer" },
     awarded: { type: "integer" },
@@ -77,9 +80,11 @@ function schema() {
     printed_max: { type: "integer" },
     criterion_results: { type: "array", items: criterion },
     comment: { type: "string" },
+    corrected_response: { type: "string" },
+    corrections: { type: "array", items: correction },
     warnings: { type: "array", items: { type: "string" } }
   }, ["id", "visible", "transcription", "reading_confidence", "printed_max",
-      "criterion_results", "comment", "warnings"]);
+      "criterion_results", "comment", "corrected_response", "corrections", "warnings"]);
   return obj({
     student_name: { type: "string" },
     name_confidence: { type: "string", enum: ["high", "medium", "low", "unreadable"] },
@@ -116,7 +121,7 @@ function assess(modelResult, selected, assessment) {
       reviewRequired = true;
       return { id: spec.id, label: spec.label, maximum: spec.max,
         score: null, transcription: "", confidence: "unreadable",
-        criteria: [], comment: "Answer not found in supplied image(s). Not scored.",
+        criteria: [], corrections: [], corrected_response:"", comment: "Answer not found in supplied image(s). Not scored.",
         warnings: ["Supply a clearer image or select only the items visible in this batch."] };
     }
     const confidence = answer.reading_confidence;
@@ -125,7 +130,7 @@ function assess(modelResult, selected, assessment) {
       reviewRequired = true;
       return { id: spec.id, label: spec.label, maximum: spec.max,
         score: null, transcription, confidence, criteria: [],
-        comment: "Unable to transcribe confidently. Human review required.",
+        corrections: [], corrected_response:"", comment: "Unable to transcribe confidently. Human review required.",
         warnings: ["No automatic score assigned for unclear handwriting."] };
     }
     if (confidence !== "high") { warnings.push("Verify medium-confidence transcription."); reviewRequired = true; }
@@ -159,14 +164,17 @@ function assess(modelResult, selected, assessment) {
     if (criteria.length !== spec.criteria.length) {
       reviewRequired = true;
       return { id: spec.id, label: spec.label, maximum: spec.max, score: null,
-        transcription, confidence, criteria, comment: "Incomplete rubric evaluation.",
+        transcription, confidence, criteria, corrections:[], corrected_response:"", comment: "Incomplete rubric evaluation.",
         warnings };
     }
     if (warnings.length || (answer.warnings || []).length) reviewRequired = true;
     sum += score;
     assessedMax += spec.max;
     return { id: spec.id, label: spec.label, maximum: spec.max, score,
-      transcription, confidence, criteria, comment: String(answer.comment || "").slice(0, 2000),
+      transcription, confidence, criteria,
+      corrections: (answer.corrections || []).slice(0, 8).map(x => ({original:String(x.original||"").slice(0,500),proposed:String(x.proposed||"").slice(0,500),reason:String(x.reason||"").slice(0,500)})),
+      corrected_response: String(answer.corrected_response || "").slice(0, 4000),
+      comment: String(answer.comment || "").slice(0, 2000),
       warnings: [...warnings, ...(answer.warnings || []).slice(0, 4).map(String)] };
   });
   if (!items.length) reviewRequired = true;
@@ -228,6 +236,10 @@ async function grade(request, env, rubrics) {
     "Transcribe only what is visible. Read the student name from the visible name field, if present.",
     "NEVER invent or infer a student name, an answer, or a score for missing or unreadable text.",
     "IGNORE MULTIPLE CHOICE questions, answer bubbles, and non-essay tasks entirely.",
+    "Give concise specific academic and technical corrections only for actual mistakes in the visible answer.",
+    "Return corrections with original student phrase, a suggested revised phrase, and the reason.",
+    "Provide a corrected_response only when the answer is legible; preserve the student meaning and distinguish missing substantive ideas from simple wording edits.",
+    "Do not penalize spelling, grammar, or language choice unless the configured rubric explicitly allocates marks for writing mechanics.",
     "Score only the selected item IDs. For each criterion allocate an INTEGER from 0 to its maximum.",
     "Use the rubric specifications and visible evidence. Support scores using actual relevant student wording.",
     "Give credit to valid alternative technical reasoning; do not require exact wording from a model answer.",
@@ -278,46 +290,33 @@ async function grade(request, env, rubrics) {
 
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
-
-    // Only server-authenticated sessions reach the private grading interface.
-    // Public hosting does not contain the instructor credentials or rubric.
-    if (request.method === "POST" && pathname === "/api/login") {
-      return login(request, env);
-    }
-    if (request.method === "POST" && pathname === "/api/logout") {
-      return logout(request);
-    }
-
-    const valid = await hasSession(request, env);
+    const {pathname} = new URL(request.url);
     if (request.method === "GET" && (pathname === "/" || pathname === "/index.html")) {
-      return new Response(valid ? page : loginPage, {
-        headers: { ...NO_STORE, "Content-Type": "text/html; charset=utf-8" }
-      });
+      return new Response(page,{headers:{...NO_STORE,"Content-Type":"text/html; charset=utf-8"}});
     }
-    if (!valid) return denied();
-
     let rubrics;
-    try { rubrics = cleanItems(JSON.parse(env.RUBRICS_JSON || "")); }
-    catch { return json({ error: "Private rubric configuration is invalid." }, 503); }
-    if (!rubrics) return json({ error: "Private rubric configuration missing." }, 503);
+    try { rubrics=cleanItems(JSON.parse(env.RUBRICS_JSON||"")); }
+    catch { return json({error:"Rubric configuration is not installed."},503); }
+    if (!rubrics) return json({error:"Rubrics not configured."},503);
 
     if (request.method === "GET" && pathname === "/api/config") {
-      return json({ assessments: Object.fromEntries(
-        Object.entries(rubrics).map(([key, items]) => [key,
-          items.map(x => ({ id: x.id, label: x.label, max: x.max }))])
-      ), privacy: "The app does not persist files or results. AI provider retention policies may apply." });
+      return json({assessments:Object.fromEntries(Object.entries(rubrics).map(([k,items]) =>
+        [k,items.map(x=>({id:x.id,label:x.label,max:x.max}))])),
+        operational:Boolean(env.OPENAI_API_KEY),
+        privacy:"Temporary application results; analysis provider's retention may apply."});
     }
+
     if (request.method === "POST" && pathname === "/api/grade") {
-      // Rate-limit expensive authenticated requests as well.
-      // Missing or broken throttling causes denial rather than unbounded API use.
-      if (!env.GRADE_RATE_LIMITER) return json({ error: "Request protection is not configured." }, 503);
-      try {
-        const limit = await env.GRADE_RATE_LIMITER.limit({key:"instructor:grade"});
-        if (!limit.success) return json({ error: "Too many requests. Try again later." }, 429);
-      } catch { return json({ error: "Request protection is unavailable." }, 503); }
-      return grade(request, env, rubrics);
+      const origin=request.headers.get("Origin");
+      if (!origin || origin!==new URL(request.url).origin) return json({error:"Invalid request origin."},403);
+      if (!env.GRADE_RATE_LIMITER) return json({error:"Rate limiting must be configured."},503);
+      const ip=request.headers.get("CF-Connecting-IP")||"unknown";
+      let outcome;
+      try { outcome=await env.GRADE_RATE_LIMITER.limit({key:"open-grade:"+ip}); }
+      catch { return json({error:"Request limiting unavailable."},503); }
+      if (!outcome.success) return json({error:"Too many requests. Try again later."},429);
+      return grade(request,env,rubrics);
     }
-    return json({ error: "Not found." }, 404);
+    return json({error:"Not found."},404);
   }
 };
