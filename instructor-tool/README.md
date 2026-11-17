@@ -1,32 +1,30 @@
-# ARTHREYSQUARED · Private Instructor Tools
+# ARTHREYSQUARED · Instructor Tools
 
-**Status: code prepared; NOT deployed or activated. Do not upload real student papers until authentication, institution authorization and API configuration are verified.**
+**Current status:** Source implemented in GitHub. The separate private Worker still needs to be deployed/configured in your Cloudflare account. Never submit actual student exam papers until it is deployed, verified and institutionally authorized.
 
-The instructor application runs on a separate Cloudflare Worker, not GitHub Pages. A hidden GitHub Pages URL, client-only password or JavaScript login does **not** make a page private.
+This is a server-verified **username + access code** sign-in. No Cloudflare Access identity provider, Google sign-in, email one-time PIN or student registration is necessary. A GitHub Pages page cannot securely verify a password, so access verification runs in a separate Cloudflare Worker. Credentials are never included in the public website source.
 
-## Features
+## Public Coursework appearance
 
-- One student per session; 1–5 JPEG/PNG/WebP photos, maximum 5 MB each / 20 MB combined.
-- Detect the visible student name and transcribe selected handwritten essay answers.
-- Ignore all multiple-choice responses.
-- Use private item-specific marking rubrics, compute a provisional, criterion-by-criterion subtotal and flag uncertain answers.
-- If a response is missing or unreadable, leave it **unscored**, not automatically zero.
-- Display results temporarily in the browser only; no database, permanent photos, analytics, class record, or automatic grade submission.
-- Expand later to other subjects by updating private rubric profiles.
+The public Coursework instructor section shows only **Instructor Tools** and **Tools for comprehensive classwork**. No tool capabilities, student papers, private rubric details, scores, passwords or account information are displayed there.
 
-**Never use suggested scores without reviewing the original paper.** Handwriting recognition and AI grading can be wrong.
+Once the Worker has been deployed securely, its actual URL can be linked from that section. Do not guess or publish a fake/undeployed URL.
 
-## IMPORTANT privacy limitation
+## What the private app does (instructor-only)
 
-The app itself does not store student images, names or results. It sends the images to the configured AI provider for processing. The provider may retain some request data under its own terms. Setting `store: false` does **not** guarantee absolute zero retention; ordinary API abuse-monitoring logs may be retained for up to 30 days without an approved alternative retention arrangement. Obtain appropriate institutional approval and satisfy privacy/third-party processing requirements before processing identifiable student records.
+- Select BET 117 Preliminary or Midterm writing sections and item numbers.
+- Upload/capture up to five clear photographs of **one student's** written responses.
+- Read a visible student name and transcribe only selected essay/written responses.
+- Apply private item rubrics; return criterion-level provisional scores and readable explanations.
+- Mark missing/unclear answers as unscored and flag names or handwriting requiring confirmation.
+- Discard temporary results on reset or after leaving the page.
+- No exam photos, results or credentials are stored in GitHub, an app database, or the browser's localStorage.
 
-Keep API keys, student data, private rubric JSON and answer keys outside this public GitHub repository.
+**Limitations:** The AI provider receives images for processing and may retain data under its own policies; therefore this cannot promise zero retention by all providers. AI may misread handwriting or grade incorrectly. An instructor must check originals and approve actual scores. Do not upload identifiable student papers until institutional privacy approval and the relevant third-party processing arrangements are confirmed.
 
-## Setup with VS Code and Windows PowerShell
+## Deploy using VS Code on Windows
 
-### 1. Pull the latest GitHub source
-
-Open your website repository locally in VS Code, then:
+### 1. Pull the latest website source
 
 ```powershell
 git status
@@ -34,107 +32,124 @@ git pull origin main
 cd instructor-tool
 ```
 
-Commit/stash local changes before pulling if necessary.
+If the repository has uncommitted local edits, commit or safely stash them first.
 
-### 2. Configure Cloudflare
-
-Obtain Cloudflare Workers and Zero Trust access. Sign in through Wrangler:
+### 2. Log in to your Cloudflare account
 
 ```powershell
 npx wrangler login
-npx wrangler deploy
 ```
 
-The first deployment is **fail-closed** and returns HTTP 403 until proper Access authentication and secrets are present.
+Cloudflare Worker deployment is separate from GitHub Pages. No Cloudflare Access identity-provider application is required.
 
-Cloudflare displays the Worker URL (typically `https://arthreysquared-instructor.YOUR-SUBDOMAIN.workers.dev`).
-
-In Cloudflare, enable **Cloudflare Access protection for the Worker**, including `workers.dev` and any other routes; do not protect just a single hostname if alternative routes remain open. In Zero Trust → Access → Applications, set an Allow policy for only **your authorized institutional email**. Do not allow Everyone or a whole email domain.
-
-An unsigned visitor and any other account must be denied. The Worker also checks the authenticated `ctx.access` identity against an instructor email secret.
-
-### 3. Set three private secrets
-
-In the same VS Code terminal:
+### 3. Configure the username and access code as *private Worker secrets*
 
 ```powershell
-npx wrangler secret put AUTHORIZED_EMAIL
+npx wrangler secret put INSTRUCTOR_USERNAME
+npx wrangler secret put INSTRUCTOR_ACCESS_CODE
+```
+
+At the terminal prompts, enter the exact username and code previously selected. **Do not paste either value into GitHub HTML, JavaScript, this README, VS Code source files, or an .env file committed to GitHub.** The terminal securely sends each value to Cloudflare's secret store.
+
+Generate a strong separate key for signed temporary sessions:
+
+```powershell
+$sessionSecret = [guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")
+$sessionSecret | npx wrangler secret put SESSION_SECRET
+Remove-Variable sessionSecret
+```
+
+Sign-in sessions expire after approximately 45 minutes. Logout clears the browser cookie. Sessions are not stored in a database.
+
+### 4. Configure the essay scoring API
+
+```powershell
 npx wrangler secret put OPENAI_API_KEY
 ```
 
-Enter your own authorized instructor email (matching the Cloudflare Access policy) and OpenAI API key. **A ChatGPT subscription is not an OpenAI API billing plan.**
+Enter a valid OpenAI API key from your own API project. API billing is separate from a ChatGPT subscription.
 
-Download the separately supplied private `BET117_PRIVATE_ESSAY_RUBRICS.json` file to a folder **outside the public website repository** (example `C:\Private-Teaching\`). Then run:
+For the BET 117 confidential rubrics, first keep the instructor JSON in a directory OUTSIDE the public repository, then run:
 
 ```powershell
 Get-Content -Raw "C:\Private-Teaching\BET117_PRIVATE_ESSAY_RUBRICS.json" | npx wrangler secret put RUBRICS_JSON
+```
+
+The private rubric file must not be pushed to GitHub. Add future course profiles to this private secret, not to a publicly accessible HTML file.
+
+The application defaults to the vision-capable `gpt-6.1-terra` model. If necessary, use `npx wrangler secret put OPENAI_MODEL` to select a different model available to your account.
+
+### 5. Deploy the private Worker
+
+```powershell
 npx wrangler deploy
 ```
 
-Do not commit the JSON file or any secrets. To change the analysis model, optionally set `OPENAI_MODEL` with `npx wrangler secret put OPENAI_MODEL`. The default is `gpt-6.1-terra`.
+Wrangler prints the **real** URL, typically resembling `https://arthreysquared-instructor.YOUR-SUBDOMAIN.workers.dev`. Copy the exact URL it provides.
 
-### 4. Verify protected access before real data
+When you open the URL, you should see a **minimal Instructor Tools login**. Enter your configured username and access code to open the grading workspace.
 
-- Signed out/private browsing: Cloudflare Access login or denial.
-- Signed in with an unapproved account: denial.
-- Signed in as the one authorized instructor: page and private rubric profiles available.
-- No exam photo is uploaded without your explicit click.
-- Blank/unclear essay content must be unscored, not invented.
-- Name is marked uncertain unless clearly read.
-- Only selected essay item numbers are evaluated.
-- Refresh or Clear removes the temporary results from the browser view.
+An incorrect username/code must return a generic access-denied message. No code or confidential rubric should appear in public page source.
 
-Use **synthetic sample papers with invented names** first. Compare provisional scores with your independently assigned marks on a sample before regular use.
+### 6. Test protection before student papers
 
-### 5. Activate an Instructor Tools link on Coursework only after the Worker is secured
+Use a private browser window without a signed session:
 
-The public Coursework instructor tab has a setup-pending notice and **no unconfigured live link**. After the Worker URL is active, replace that notice with a button similar to:
+- The Worker must show only the two-field login screen.
+- Private API routes `GET /api/config` and `POST /api/grade` must deny access before login.
+- An incorrect username or code must be rejected.
+- Login requests are approximately limited to five per minute per network origin at each Cloudflare location.
+- Correct credentials should open the private workspace.
+- The Sign out button and the 45-minute session expiry must prevent further grading access.
+- Try sample handwritten answers with **invented student names only** until institutional approval and grading validation are complete.
+
+### 7. Connect the secured Worker to the Coursework section
+
+After successful deployment, edit `coursework.html` in VS Code. Beneath the short instructor card text, add a link using the **real URL shown by Wrangler**:
 
 ```html
 <a class="btn btn-primary"
-   href="https://arthreysquared-instructor.YOUR-SUBDOMAIN.workers.dev"
-   target="_blank" rel="noopener noreferrer">Open Private Instructor Tools</a>
+   href="https://YOUR-REAL-WORKER-URL"
+   rel="noopener noreferrer">
+  Open Instructor Tools
+</a>
 ```
 
-Then commit only `coursework.html`:
+The public card must stay generic. The credential check takes place on the Worker server even though the login link is visible publicly.
+
+Commit the resulting public card update:
 
 ```powershell
 git add coursework.html
-git commit -m "Activate secured Instructor Tools link"
+git commit -m "Link Instructor Tools to private login"
 git push origin main
 ```
 
-**A visible public link is not a security problem only if Cloudflare Access actually denies all unauthorized users and all Worker entrypoints.** Never rely on hiding the link.
+## Deployment details
 
-## BET 117 profile and scoring
+The Cloudflare Worker configuration includes:
+- Rate limiting on sign-in attempts and essay analysis requests.
+- Secure, HttpOnly, SameSite=Strict, short-lived signed session cookies.
+- Exact same-origin checks on login, logout and essay-submission requests.
+- No persistent student image store, results database or browser localStorage.
+- Disabled Worker observability for request/body logging.
+- Fail-closed behavior if the credential/session secrets or protection bindings are not configured.
 
-The instructor marking guide specifies these essay/written-response points:
+Rate limiting is approximate and not an absolute brute-force defense. Use sufficiently strong unique credentials; because the requested code has appeared in a conversation, consider rotating it before deploying to production.
 
-- Preliminary Items 21–24: 4 × 9 = **36** points (CO1).
-- Preliminary Items 25–27: 3 × 8 = **24** points (CO2).
-- **Preliminary written-response portion: 60/100**, excluding multiple-choice items.
-- Midterm Item 11: **5** points (CO2).
-- Midterm Items 12–14: 3 × 25 = **75** points (CO3).
-- **Midterm written-response portion: 80/100**, excluding multiple-choice items.
+## BET 117 essay portion
 
-The **confidential detailed criteria** live only in the private `RUBRICS_JSON` Worker secret. Exact exam questions, reference answers and student papers are not committed to GitHub.
+- Prelim written Items 21–24: 36 points; Items 25–27: 24 points. Essay subtotal: 60 points.
+- Midterm written Item 11: 5 points; Items 12–14: 75 points. Written-response subtotal: 80 points.
+- Multiple-choice components are excluded.
+- Do not publish the private marking rubric or individual scores.
 
-## Reuse with other subjects
+## Future subjects
 
-Add additional assessment profiles to the private rubric file using the existing JSON structure: assessment key → item list → item number, maximum marks, instructions, and criteria (each criterion has a label, an integer maximum, and a scoring guide). Re-upload the private `RUBRICS_JSON` secret. The tool does not require student registration.
+The same instructor workspace can support CET 111, CET 134, CET 154, ENS 150.2, and others through privately configured rubric profiles. This does not require separate student accounts.
 
-## Privacy and operational checklist
-
-- Verify institutional permission, privacy notice/lawful basis and third-party processing terms.
-- Protect entire Worker through Cloudflare Access; authorize only one account.
-- Store `AUTHORIZED_EMAIL`, `OPENAI_API_KEY` and `RUBRICS_JSON` as Worker secrets.
-- Do not add analytics, persistent database, request-body logging or cloud file storage.
-- Understand AI provider's retention; do not promise that no system ever retains inputs.
-- Always review uncertain names, handwriting and scores.
-- Never auto-publish grades or put students' personal records in public repositories.
-
-Official references:
-- https://developers.cloudflare.com/workers/configuration/cloudflare-access/
+References:
 - https://developers.cloudflare.com/workers/wrangler/
+- https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+- https://developers.cloudflare.com/workers/runtime-apis/web-crypto/
 - https://developers.openai.com/api/docs/guides/your-data
-- https://privacy.gov.ph/online-learning-guidelines-issued-to-help-protect-student-privacy-and-reduce-data-breaches-in-schools/
