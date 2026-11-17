@@ -93,7 +93,11 @@ export async function login(req, env) {
   catch { return respondJson({error:"Login temporarily unavailable."},503); }
   if (!limit.success) return respondJson({error:"Too many attempts. Try again later."},429);
   let input;
-  try { input=await req.json(); } catch { return respondJson({error:"Invalid login request."},400); }
+  try {
+    const raw = await req.text();
+    if (raw.length > 2048) return respondJson({error:"Request is too large."},413);
+    input = JSON.parse(raw);
+  } catch { return respondJson({error:"Invalid login request."},400); }
   if (typeof input?.username!=="string"||typeof input?.code!=="string"||
       input.username.length>100||input.code.length>256) {
     return respondJson({error:"Incorrect username or access code."},401);
