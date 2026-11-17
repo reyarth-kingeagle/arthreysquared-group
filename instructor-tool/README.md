@@ -6,7 +6,7 @@ The instructor application runs on a separate Cloudflare Worker, not GitHub Page
 
 ## Features
 
-- One student per session; 1–4 JPEG/PNG/WebP photos, maximum 5 MB each / 16 MB combined.
+- One student per session; 1–5 JPEG/PNG/WebP photos, maximum 5 MB each / 20 MB combined.
 - Detect the visible student name and transcribe selected handwritten essay answers.
 - Ignore all multiple-choice responses.
 - Use private item-specific marking rubrics, compute a provisional, criterion-by-criterion subtotal and flag uncertain answers.
