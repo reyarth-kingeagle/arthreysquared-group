@@ -1,12 +1,11 @@
-# Independent server-side protected Instructor Tools application, NOT GitHub Pages.
-# Username, access code and session key are configured as Cloudflare Worker secrets.
-# Do not place credentials or private assessment data in this public file.
+# Optional server-side deployment for no-login Instructor Tools.
+# GitHub Pages hosts static HTML but cannot run a grading API itself.
+# Keep OPENAI_API_KEY and RUBRICS_JSON in Worker secrets (never in GitHub).
 name = "arthreysquared-instructor"
 main = "worker.js"
 compatibility_date = "2026-11-17"
 workers_dev = true
 
-# No application request/body logging and no storage bindings.
 [observability]
 enabled = false
 
@@ -15,17 +14,10 @@ type = "Text"
 globs = ["**/*.html"]
 fallthrough = true
 
-# Cloudflare Workers native rate-limit bindings (approximate per Cloudflare location).
-[[ratelimits]]
-name = "LOGIN_RATE_LIMITER"
-namespace_id = "9160171"
-[ratelimits.simple]
-limit = 5
-period = 60
-
+# Throttle unauthenticated submissions by network source.
 [[ratelimits]]
 name = "GRADE_RATE_LIMITER"
 namespace_id = "9160172"
 [ratelimits.simple]
-limit = 12
+limit = 3
 period = 60
