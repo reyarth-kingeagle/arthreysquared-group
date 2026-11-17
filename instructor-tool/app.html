@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>Private Instructor Tools · ARTHREYSQUARED</title>
+<style>
+:root{--navy:#0b1f3a;--blue:#214966;--teal:#0d7771;--gold:#d2ab64;--ink:#162c40;--muted:#52657a;--border:#d8e3ed;--pale:#f5f9fc}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:#f5f8fb;color:var(--ink)}
+a{color:#1b6282}
+button,input,select{font:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #ce993b;outline-offset:3px}
+.wrap{width:min(1070px,calc(100% - 30px));margin:auto}
+header{background:var(--navy);color:#fff;padding:14px 0}
+header .wrap{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.headerbrand{font-weight:850;letter-spacing:.06em;text-transform:uppercase;font-size:.88rem}
+.headerbrand span{color:#d9b46f}
+header small{color:#d0e0eb}
+main{padding:28px 0 70px}
+.hero{padding:clamp(22px,4vw,36px);border-radius:20px;background:linear-gradient(115deg,#0b1f3a,#194e6b 70%,#116d6d);color:#fff}
+.hero small{text-transform:uppercase;letter-spacing:.12em;color:#c4e3e0;font-weight:800}
+.hero h1{font-size:clamp(1.8rem,4vw,2.85rem);line-height:1.14;margin:9px 0 13px}
+.hero p{margin:0;color:#e0edf3;max-width:770px}
+.summarygrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:16px;margin-top:19px;align-items:start}
+.card{border-radius:17px;padding:22px;background:#fff;border:1px solid var(--border);min-width:0}
+.card h2{font-size:1.25rem;color:#153d59;margin:0 0 10px}
+.card h3{font-size:1rem;color:#214b62;margin:17px 0 8px}
+.card p{color:var(--muted);margin:5px 0 14px}
+.step{display:flex;gap:12px;align-items:start;margin:18px 0}
+.stepno{display:grid;place-items:center;background:#e8f5f3;border-radius:10px;flex:0 0 34px;height:34px;font-size:.9rem;font-weight:850;color:#076d62}
+.field{display:block;font-weight:750;color:#244661;font-size:.9rem;margin:12px 0 7px}
+select,input[type=file]{display:block;width:100%;min-height:45px;border:1px solid #aabccb;border-radius:11px;padding:10px;background:white;color:var(--ink)}
+select{cursor:pointer}
+#item-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.itemcheck{display:flex;gap:9px;align-items:center;border:1px solid var(--border);padding:11px;border-radius:12px;font-size:.91rem}
+.itemcheck input{accent-color:var(--teal);width:19px;height:19px;flex:0 0 auto}
+.itemcheck span{flex:1}
+.uploadnote{font-size:.81rem;color:#64758a}
+.previewgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:10px}
+.preview{border:1px solid var(--border);border-radius:9px;overflow:hidden;background:var(--pale)}
+.preview img{display:block;width:100%;height:105px;object-fit:cover}
+.preview span{display:block;font-size:.73rem;overflow-wrap:anywhere;padding:5px 8px;color:#486177}
+.ack{display:flex;align-items:flex-start;gap:11px;margin:22px 0 12px;padding:13px;border:1px solid #b4d5d3;background:#eff9f6;border-radius:11px;color:#264f50;font-size:.85rem}
+.ack input{width:19px;height:19px;accent-color:var(--teal);flex-shrink:0;margin-top:3px}
+.actionrow{display:flex;flex-wrap:wrap;gap:10px}
+.btn{border-radius:10px;border:1px solid var(--border);padding:11px 17px;min-height:45px;cursor:pointer;font-weight:800;color:#1d435e;background:#fff}
+.btn.primary{background:#0d6964;border-color:#0d6964;color:white}
+.btn:disabled{cursor:not-allowed;opacity:.53}
+.btn:not(:disabled):hover{filter:brightness(.95)}
+.alert{padding:12px 16px;border-radius:11px;background:#f4f8fb;color:#3a5368;font-size:.9rem;margin-top:12px}
+.alert.warn{background:#fff4e2;color:#694512;border:1px solid #e5c887}
+.alert.danger{background:#fff1ee;color:#833c30;border:1px solid #e5b7ad}
+.alert.success{background:#eaf7f3;color:#166051;border:1px solid #b4d5c7}
+.mini{font-size:.83rem}
+.note-list{padding-left:19px;color:#4e6478}
+.note-list li+li{margin-top:7px}
+#results{margin-top:19px}
+.resulthead{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:15px}
+.scoresummary{font-size:1.6rem;color:#153a54;font-weight:900}
+.scoresummary small{display:block;font-size:.8rem;color:#657789;font-weight:500}
+.resultname{margin:5px 0;color:#29536c}
+.resultname strong{font-size:1.1rem}
+.resultname input{border:1px solid #b6c7d1;border-radius:7px;padding:6px 8px;width:min(300px,100%);background:#fff;margin-left:8px}
+.resultitem{border:1px solid var(--border);border-radius:13px;margin:11px 0;padding:0 14px;background:white}
+.resultitem summary{cursor:pointer;font-weight:800;padding:15px 0;color:#173d56}
+.resultitem p{margin:7px 0;color:#3b576d}
+.resultitem .review{color:#8b5410}
+.transcription{white-space:pre-wrap;word-break:break-word;background:#f7fafc;border:1px solid var(--border);border-radius:9px;padding:12px;font-size:.93rem;max-height:360px;overflow:auto}
+.criteriongrid{display:grid;grid-template-columns:1fr auto;gap:5px 12px;padding:11px 0;border-top:1px solid #e1e8ef}
+.criteriongrid .awarded{font-weight:850;white-space:nowrap;color:#0d6b60}
+.criteriongrid small{grid-column:1/-1;color:#52697a}
+#results[hidden]{display:none}
+footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
+@media(max-width:760px){.summarygrid{grid-template-columns:1fr}.previewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}#item-list{grid-template-columns:1fr}}
+@media(max-width:450px){.wrap{width:calc(100% - 24px)}.card{padding:16px}.hero{padding:23px 18px}.actionrow .btn{width:100%}.resultname input{display:block;margin:5px 0}.previewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*,*::after,*::before{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media print{header,.hero,.summarygrid,.actionrow,#status,footer{display:none!important}body{background:white}.wrap{width:100%}#results{display:block!important}.resultitem{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="headerbrand">ARTHREYSQUARED <span>· Instructor Tools</span></span><small>Private authenticated workspace · Provisional scoring</small></div></header>
+<main class="wrap">
+<section class="hero"><small>Instructor workspace · Pilot</small><h1>Essay photo reader &amp; rubric checker</h1><p>Read student names and handwritten responses from photos, evaluate only selected essay items, and view a temporary, criterion-by-criterion scoring suggestion. You decide the final grade.</p></section>
+<div class="summarygrid">
+<section class="card" aria-labelledby="form-heading">
+<h2 id="form-heading">Analyze a student's paper</h2>
+<div class="step"><span class="stepno">1</span><div style="flex:1;min-width:0"><label class="field" for="assessment">Select course examination</label><select id="assessment" required><option value="">Loading private grading profiles…</option></select></div></div>
+<div class="step"><span class="stepno">2</span><div style="flex:1;min-width:0"><span class="field">Select only the essay items shown in your photos</span><div id="item-list" aria-label="Essay item selection"></div><p class="uploadnote">Unselected items are never graded. Missing or illegible selected answers remain unscored rather than receiving an automatic zero.</p></div></div>
+<div class="step"><span class="stepno">3</span><div style="flex:1;min-width:0"><label class="field" for="photos">Capture or select clear photos (up to 4)</label><input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="upload-help"><p class="uploadnote" id="upload-help">JPEG, PNG or WebP; maximum 5 MB per photo and 16 MB combined. Capture the student name and complete essay responses. Do not upload multiple students in one batch.</p><div id="previews" class="previewgrid" aria-live="polite"></div></div></div>
+<label class="ack"><input id="authorized" type="checkbox"><span>I confirm that I am authorized by my institution to process these identifiable student papers through this third-party AI service, and that I have reviewed the applicable privacy and data-processing requirements.</span></label>
+<div class="actionrow"><button class="btn primary" id="analyze" type="button" disabled>Analyze selected essay items</button><button class="btn" id="clear" type="button">Clear photos &amp; results</button></div>
+<div id="status" class="alert" role="status" aria-live="polite">Connecting to the protected grading profiles…</div>
+</section>
+<aside class="card" aria-labelledby="notice-heading"><h2 id="notice-heading">Privacy and marking controls</h2>
+<ul class="note-list">
+<li><strong>Instructor access only:</strong> Cloudflare Access must authenticate and match the configured instructor email. A simple hidden link or browser password is not enough.</li>
+<li><strong>No application storage:</strong> The app does not upload files to GitHub, store them in a database, or save results between visits.</li>
+<li><strong>Third-party processing:</strong> Photo content is sent to the configured AI provider. Its data-retention rules still apply; this is not a zero-retention guarantee.</li>
+<li><strong>Handwriting uncertainty:</strong> Unclear text or names must be checked against the original paper. The tool never promises perfect transcription or grading.</li>
+<li><strong>Rubric-anchored:</strong> Essay marks are allocated to the configured instructor rubric criteria, not to multiple-choice answers.</li>
+<li><strong>Instructor decision:</strong> Scores are provisional and require your review before they are used in a class record.</li>
+</ul>
+<p class="mini">Your selected image files and temporary results are cleared from this page by the Clear button or by closing the page. This browser does not store a grading history.</p>
+</aside>
+</div>
+<section id="results" class="card" hidden aria-labelledby="results-heading"><div class="resulthead"><div><h2 id="results-heading">Temporary grading summary</h2><p class="resultname">Name detected: <strong id="studentname">—</strong> <span id="nameconfidence"></span></p></div><div class="scoresummary" id="total">—</div></div>
+<p class="alert warn" id="reviewwarning">All results are provisional; inspect the actual paper and verify each criterion before finalizing grades.</p><div id="itemresults"></div><div class="actionrow"><button id="copy" class="btn" type="button">Copy temporary summary</button><button id="clear2" class="btn" type="button">Clear now</button></div></section>
+</main>
+<footer>ARTHREYSQUARED Group · Private Instructor Tools · No automatic recording of grades</footer>
+<script>
+(function () {
+  "use strict";
+  const byId = id => document.getElementById(id);
+  const assessment = byId("assessment"), list = byId("item-list");
+  const photos = byId("photos"), previews = byId("previews");
+  const status = byId("status"), analyze = byId("analyze"), authorized = byId("authorized");
+  const results = byId("results"), itemresults = byId("itemresults");
+  const state = { config: {}, files: [], objectUrls: [], lastResult: null };
+  function node(tag, text, className) {
+    const x = document.createElement(tag);
+    if (text !== undefined && text !== null) x.textContent = String(text);
+    if (className) x.className = className;
+    return x;
+  }
+  function setStatus(message, cls = "") {
+    status.textContent = message;
+    status.className = "alert" + (cls ? " " + cls : "");
+  }
+  function chosen() {
+    return [...list.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
+  }
+  function updateReady() {
+    analyze.disabled = !assessment.value || !chosen().length ||
+      !state.files.length || !authorized.checked || !state.config[assessment.value];
+  }
+  function addPreview() {
+    for (const url of state.objectUrls) URL.revokeObjectURL(url);
+    state.objectUrls = [];
+    previews.replaceChildren();
+    state.files.forEach(file => {
+      const url = URL.createObjectURL(file);
+      state.objectUrls.push(url);
+      const box = node("div", "", "preview"), img = node("img");
+      img.src = url;
+      img.alt = "Temporary preview of selected exam photo";
+      box.append(img, node("span", file.name));
+      previews.appendChild(box);
+    });
+  }
+  photos.addEventListener("change", () => {
+    const files = [...photos.files];
+    const allowed = ["image/jpeg","image/png","image/webp"];
+    if (files.length > 4 || files.some(f => !allowed.includes(f.type) || f.size > 5 * 1024 * 1024) ||
+       files.reduce((a,f) => a+f.size,0) > 16 * 1024 * 1024) {
+      photos.value = "";
+      state.files = []; addPreview(); updateReady();
+      return setStatus("Choose 1–4 JPEG, PNG or WebP images; max 5 MB each and 16 MB total.", "danger");
+    }
+    state.files = files;
+    addPreview();
+    setStatus(files.length ? files.length + " photo(s) selected. Verify legibility before analysis." : "Choose clear photos.");
+    updateReady();
+  });
+  assessment.addEventListener("change", () => {
+    list.replaceChildren();
+    const options = state.config[assessment.value] || [];
+    options.forEach(item => {
+      const label = node("label", "", "itemcheck");
+      const input = node("input");
+      input.type = "checkbox"; input.value = item.id;
+      const title = node("span", item.label + " · " + item.max + " pts");
+      label.append(input,title);list.appendChild(label);
+      input.addEventListener("change", updateReady);
+    });
+    updateReady();
+  });
+  authorized.addEventListener("change", updateReady);
+  function reset() {
+    state.files = []; state.lastResult = null;
+    for (const url of state.objectUrls) URL.revokeObjectURL(url);
+    state.objectUrls = [];
+    photos.value = "";
+    previews.replaceChildren();
+    results.hidden = true; itemresults.replaceChildren();
+    authorized.checked = false;
+    setStatus("All photos and temporary results were cleared from this browser view.", "success");
+    updateReady();
+  }
+  byId("clear").addEventListener("click", reset);
+  byId("clear2").addEventListener("click", reset);
+  function toDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(Error("Could not read the photo."));
+      reader.readAsDataURL(file);
+    });
+  }
+  function renderReport(r) {
+    state.lastResult = r;
+    byId("studentname").textContent = r.student_name || "Not reliably detected — check original";
+    byId("nameconfidence").textContent = " (" + r.name_confidence + " confidence)";
+    byId("total").replaceChildren(
+      node("div", r.score_for_scored_items + " / " + r.maximum_of_scored_items + " pts"),
+      node("small", r.scored_item_count + " of " + r.selected_item_count + " selected items assessed")
+    );
+    byId("reviewwarning").textContent = r.review_required ?
+      "REVIEW REQUIRED: Name, transcription, missing answers, or rubric checks need your confirmation. No score is final." :
+      "PROVISIONAL: All selected items were analyzed, but the instructor must still verify scores before recording.";
+    itemresults.replaceChildren();
+    (r.items || []).forEach(it => {
+      const detail = node("details", "", "resultitem");
+      detail.open = true;
+      const summary = node("summary", "Item " + it.id + " — " +
+        (it.score === null ? "Not scored / " + it.maximum : it.score + " / " + it.maximum) +
+        " points" + (it.confidence !== "high" ? " · Review transcription" : ""));
+      detail.appendChild(summary);
+      const transTitle = node("h3", "Visible answer transcription");
+      const trans = node("div", it.transcription || "(No legible answer detected)", "transcription");
+      detail.append(transTitle,trans);
+      const critTitle = node("h3", "Rubric scoring");
+      detail.appendChild(critTitle);
+      (it.criteria || []).forEach(c => {
+        const line = node("div", "", "criteriongrid");
+        line.append(node("span", c.title), node("span", c.awarded + " / " + c.maximum, "awarded"),
+          node("small", "Evidence: " + (c.evidence || "Not stated") + " · " + (c.explanation || "")));
+        detail.appendChild(line);
+      });
+      detail.append(node("p", "Review note: " + (it.comment || "No specific comment.")));
+      (it.warnings || []).forEach(w => detail.append(node("p","⚠ " + w,"review")));
+      itemresults.appendChild(detail);
+    });
+    (r.warnings || []).forEach(w => itemresults.appendChild(node("p", "Attention: " + w, "alert warn")));
+    results.hidden = false;
+    results.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+  analyze.addEventListener("click", async () => {
+    if (analyze.disabled) return;
+    const item_ids = chosen();
+    analyze.disabled = true;
+    setStatus("Analyzing in this session. Keep this page open until results appear; no photos are being stored by this application.");
+    try {
+      const images = await Promise.all(state.files.map(toDataURL));
+      const response = await fetch("/api/grade", {
+        method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ assessment:assessment.value, item_ids, images }),
+        cache:"no-store"
+      });
+      const data = await response.json();
+      if (!response.ok) throw Error(data.error || "Analysis unsuccessful.");
+      renderReport(data);
+      setStatus("Temporary rubric evaluation ready. Review the original paper before recording any grades.", "success");
+    } catch(error) {
+      setStatus(String(error.message || error), "danger");
+    } finally {
+      updateReady();
+    }
+  });
+  byId("copy").addEventListener("click", async () => {
+    const r = state.lastResult;
+    if (!r) return;
+    const lines = [
+      "BET 117 provisional AI-assisted assessment — instructor review required",
+      "Student: " + (r.student_name || "Unverified"),
+      "Assessment: " + r.assessment,
+      "Selected items scored: " + r.scored_item_count + "/" + r.selected_item_count,
+      "Provisional scored subtotal: " + r.score_for_scored_items + "/" + r.maximum_of_scored_items,
+      ...r.items.map(x => "Item " + x.id + ": " + (x.score === null ? "UNSCORED" : (x.score + "/" + x.maximum)) + " | " + x.comment),
+      "NOT AN OFFICIAL GRADE"
+    ];
+    try { await navigator.clipboard.writeText(lines.join("\n")); setStatus("Provisional summary copied by you to your clipboard.", "success"); }
+    catch { setStatus("Clipboard access unavailable on this browser.", "warn"); }
+  });
+  async function load() {
+    try {
+      const res = await fetch("/api/config", {cache:"no-store",credentials:"same-origin"});
+      if (!res.ok) throw Error("Private grading profiles unavailable.");
+      const info = await res.json();
+      state.config = info.assessments || {};
+      assessment.replaceChildren(node("option", "Select examination"));
+      assessment.options[0].value = "";
+      for (const key of Object.keys(state.config)) {
+        const option = node("option", key === "bet117_prelim" ? "BET 117 · Preliminary essays" :
+          key === "bet117_midterm" ? "BET 117 · Midterm written responses" : key.replaceAll("_"," "));
+        option.value = key;
+        assessment.append(option);
+      }
+      setStatus("Protected rubrics loaded. Choose the assessment and upload one student's paper.", "success");
+    } catch(error) {
+      assessment.replaceChildren(node("option","Unavailable — contact administrator"));
+      setStatus(error.message || "Could not load private rubric.", "danger");
+    }
+  }
+  window.addEventListener("pagehide", () => {
+    for (const url of state.objectUrls) URL.revokeObjectURL(url);
+    state.objectUrls = [];
+    state.files = [];state.lastResult = null;
+  });
+  load();
+}());
+</script>
+</body>
+</html>
