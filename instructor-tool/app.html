@@ -80,7 +80,7 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 </style>
 </head>
 <body>
-<header><div class="wrap"><span class="headerbrand">ARTHREYSQUARED <span>· Instructor Tools</span></span><small>Private authenticated workspace · Provisional scoring</small></div></header>
+<header><div class="wrap"><span class="headerbrand">ARTHREYSQUARED <span>· Instructor Tools</span></span><button id="signout" class="btn" type="button">Sign out</button></div></header>
 <main class="wrap">
 <section class="hero"><small>Instructor workspace · Pilot</small><h1>Essay photo reader &amp; rubric checker</h1><p>Read student names and handwritten responses from photos, evaluate only selected essay items, and view a temporary, criterion-by-criterion scoring suggestion. You decide the final grade.</p></section>
 <div class="summarygrid">
@@ -95,7 +95,7 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 </section>
 <aside class="card" aria-labelledby="notice-heading"><h2 id="notice-heading">Privacy and marking controls</h2>
 <ul class="note-list">
-<li><strong>Instructor access only:</strong> Cloudflare Access must authenticate and match the configured instructor email. A simple hidden link or browser password is not enough.</li>
+<li><strong>Instructor access only:</strong> The username and access code are checked on the server. Your temporary session expires automatically.</li>
 <li><strong>No application storage:</strong> The app does not upload files to GitHub, store them in a database, or save results between visits.</li>
 <li><strong>Third-party processing:</strong> Photo content is sent to the configured AI provider. Its data-retention rules still apply; this is not a zero-retention guarantee.</li>
 <li><strong>Handwriting uncertainty:</strong> Unclear text or names must be checked against the original paper. The tool never promises perfect transcription or grading.</li>
@@ -298,6 +298,14 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
     for (const url of state.objectUrls) URL.revokeObjectURL(url);
     state.objectUrls = [];
     state.files = [];state.lastResult = null;
+  });
+  byId("signout").addEventListener("click", async () => {
+    try {
+      await fetch("/api/logout", {method:"POST",credentials:"same-origin",cache:"no-store"});
+    } finally {
+      reset();
+      window.location.replace("/");
+    }
   });
   load();
 }());
