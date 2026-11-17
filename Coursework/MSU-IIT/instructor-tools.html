@@ -77,6 +77,8 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 @media(max-width:450px){.wrap{width:calc(100% - 24px)}.card{padding:16px}.hero{padding:23px 18px}.actionrow .btn{width:100%}.resultname input{display:block;margin:5px 0}.previewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*,*::after,*::before{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 @media print{header,.hero,.summarygrid,.actionrow,#status,footer{display:none!important}body{background:white;color:#111}.wrap{width:100%}main{padding:0}#results{display:block!important;border:0;box-shadow:none;padding:0}.resultitem{break-inside:avoid}.transcription{max-height:none;overflow:visible}h2,h3{color:#111}@page{size:A4;margin:14mm}}
+[contenteditable="true"]{display:inline-block;border-bottom:1px dashed #0b7870;min-width:3ch;outline-offset:2px}
+@media print{[contenteditable="true"]{border:0!important}.criteriongrid input{border:0!important;color:#111!important}}
 </style>
 </head>
 <body>
@@ -450,23 +452,50 @@ function show(r){
  byId("report-date").textContent="ARTHREYSQUARED · PROVISIONAL ASSESSMENT · "+new Date().toLocaleString();
  byId("report-assessment").textContent="Assessment: "+r.assessment;
  byId("studentname").textContent=r.student_name||"Not clearly readable — verify from paper";
+ byId("studentname").contentEditable="true";
+ byId("studentname").setAttribute("role","textbox");
+ byId("studentname").setAttribute("aria-label","Edit student name after checking original paper");
+ byId("studentname").title="Click to correct the detected name before printing";
+ byId("studentname").oninput=()=>{r.student_name=byId("studentname").textContent.trim().slice(0,180);};
  byId("nameconfidence").textContent=" ("+r.name_confidence+" confidence)";
- byId("total").replaceChildren(node("div",r.score_for_scored_items+" / "+r.maximum_of_scored_items+" pts"),
-  node("small",r.scored_item_count+" of "+r.selected_item_count+" items scored"));
+ function refresh(){
+    r.score_for_scored_items=r.items.filter(i=>i.score!==null).reduce((sum,i)=>sum+i.score,0);
+    byId("total").replaceChildren(node("div",r.score_for_scored_items+" / "+r.maximum_of_scored_items+" pts"),
+      node("small",r.scored_item_count+" of "+r.selected_item_count+" items scored"));
+ }
+ refresh();
  byId("reviewwarning").textContent=r.review_required?
  "Review required: uncertain name, text, point values or rubric detail. Instructor confirmation is mandatory.":
  "Provisional recommendation. Instructor must still confirm original paper and marks.";
  itemsDiv.replaceChildren();
  for(const it of r.items||[]){
    const detail=node("details",undefined,"resultitem");detail.open=true;
-   detail.append(node("summary","Item "+it.id+" — "+(it.score===null?"UNSCORED":it.score+" / "+it.maximum+" points")));
+   const title=node("summary","Item "+it.id+" — "+(it.score===null?"UNSCORED":it.score+" / "+it.maximum+" points"));
+   detail.append(title);
    detail.append(node("h3","Transcribed student response"),node("div",it.transcription||"(No legible text)","transcription"));
    if(it.criteria?.length){
      detail.append(node("h3","Rubric scoring and evidence"));
      for(const cr of it.criteria){
        const line=node("div",undefined,"criteriongrid");
-       line.append(node("span",cr.title),node("span",cr.awarded+"/"+cr.maximum,"awarded"),
-        node("small","Evidence: "+cr.evidence+" · "+cr.explanation));
+       const input=document.createElement("input");
+       input.type="number";input.min="0";input.max=String(cr.maximum);input.step="1";
+       input.value=String(cr.awarded);
+       input.setAttribute("aria-label","Instructor verified marks for "+cr.title+" (out of "+cr.maximum+")");
+       input.style.cssText="width:66px;min-height:34px;border:1px solid #a1bac9;border-radius:7px;text-align:center;font-size:.89rem";
+       const control=node("label",undefined,"awarded");
+       control.append(input,node("span"," / "+cr.maximum));
+       line.append(node("span",cr.title),control,
+        node("small","AI evidence: "+cr.evidence+" · "+cr.explanation));
+       input.addEventListener("change",()=>{
+         const n=Number(input.value);
+         if(!Number.isInteger(n)||n<0||n>cr.maximum){
+           input.value=String(cr.awarded);message("Criterion points must be a whole number between 0 and "+cr.maximum,"warn");return;
+         }
+         cr.awarded=n;
+         it.score=it.criteria.reduce((total,x)=>total+x.awarded,0);
+         title.textContent="Item "+it.id+" — "+it.score+" / "+it.maximum+" points (instructor reviewed)";
+         refresh();
+       });
        detail.append(line);
      }
    }
