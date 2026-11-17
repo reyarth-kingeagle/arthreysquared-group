@@ -76,11 +76,11 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 @media(max-width:760px){.summarygrid{grid-template-columns:1fr}.previewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}#item-list{grid-template-columns:1fr}}
 @media(max-width:450px){.wrap{width:calc(100% - 24px)}.card{padding:16px}.hero{padding:23px 18px}.actionrow .btn{width:100%}.resultname input{display:block;margin:5px 0}.previewgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*,*::after,*::before{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-@media print{header,.hero,.summarygrid,.actionrow,#status,footer{display:none!important}body{background:white}.wrap{width:100%}#results{display:block!important}.resultitem{break-inside:avoid}}
+@media print{header,.hero,.summarygrid,.actionrow,#status,footer{display:none!important}body{background:white;color:#111}.wrap{width:100%}main{padding:0}#results{display:block!important;border:0;box-shadow:none;padding:0}.resultitem{break-inside:avoid}.transcription{max-height:none;overflow:visible}h2,h3{color:#111}@page{size:A4;margin:14mm}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><span class="headerbrand">ARTHREYSQUARED <span>· Instructor Tools</span></span><button id="signout" class="btn" type="button">Sign out</button></div></header>
+<header><div class="wrap"><span class="headerbrand">ARTHREYSQUARED <span>· Instructor Tools</span></span><small>Comprehensive classwork workspace · Temporary results</small></div></header>
 <main class="wrap">
 <section class="hero"><small>Instructor workspace · Pilot</small><h1>Essay photo reader &amp; rubric checker</h1><p>Read student names and handwritten responses from photos, evaluate only selected essay items, and view a temporary, criterion-by-criterion scoring suggestion. You decide the final grade.</p></section>
 <div class="summarygrid">
@@ -88,14 +88,14 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 <h2 id="form-heading">Analyze a student's paper</h2>
 <div class="step"><span class="stepno">1</span><div style="flex:1;min-width:0"><label class="field" for="assessment">Select course examination</label><select id="assessment" required><option value="">Loading private grading profiles…</option></select></div></div>
 <div class="step"><span class="stepno">2</span><div style="flex:1;min-width:0"><span class="field">Select only the essay items shown in your photos</span><div id="item-list" aria-label="Essay item selection"></div><p class="uploadnote">Unselected items are never graded. Missing or illegible selected answers remain unscored rather than receiving an automatic zero.</p></div></div>
-<div class="step"><span class="stepno">3</span><div style="flex:1;min-width:0"><label class="field" for="photos">Capture or select clear photos (up to 5)</label><input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="upload-help"><p class="uploadnote" id="upload-help">JPEG, PNG or WebP; maximum 5 MB per photo and 20 MB combined. Capture the student name and complete essay responses. Do not upload multiple students in one batch.</p><div id="previews" class="previewgrid" aria-live="polite"></div></div></div>
+<div class="step"><span class="stepno">3</span><div style="flex:1;min-width:0"><label class="field" for="photos">Upload existing photos (up to 5)</label><input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="upload-help"><label class="field" for="camera-photo">Or use the phone camera</label><input id="camera-photo" type="file" accept="image/*" capture="environment"><div class="actionrow" style="margin-top:9px"><button id="open-camera" class="btn" type="button">Open live camera</button><button id="take-photo" class="btn" type="button" hidden>Capture photo</button><button id="stop-camera" class="btn" type="button" hidden>Close camera</button></div><video id="live-camera" autoplay playsinline muted hidden style="width:100%;max-height:330px;border-radius:10px;background:#172839;margin-top:10px;object-fit:contain"></video><p class="uploadnote" id="upload-help">JPEG, PNG or WebP; maximum 5 MB per photo and 20 MB combined. Capture the student name and complete essay responses on well-lit pages. Do not upload multiple students in one batch.</p><div id="previews" class="previewgrid" aria-live="polite"></div></div></div>
 <label class="ack"><input id="authorized" type="checkbox"><span>I confirm that I am authorized by my institution to process these identifiable student papers through this third-party AI service, and that I have reviewed the applicable privacy and data-processing requirements.</span></label>
 <div class="actionrow"><button class="btn primary" id="analyze" type="button" disabled>Analyze selected essay items</button><button class="btn" id="clear" type="button">Clear photos &amp; results</button></div>
 <div id="status" class="alert" role="status" aria-live="polite">Connecting to the protected grading profiles…</div>
 </section>
 <aside class="card" aria-labelledby="notice-heading"><h2 id="notice-heading">Privacy and marking controls</h2>
 <ul class="note-list">
-<li><strong>Instructor access only:</strong> The username and access code are checked on the server. Your temporary session expires automatically.</li>
+<li><strong>Open workspace:</strong> No account or password is required. The tool processes one student paper at a time.</li>
 <li><strong>No application storage:</strong> The app does not upload files to GitHub, store them in a database, or save results between visits.</li>
 <li><strong>Third-party processing:</strong> Photo content is sent to the configured AI provider. Its data-retention rules still apply; this is not a zero-retention guarantee.</li>
 <li><strong>Handwriting uncertainty:</strong> Unclear text or names must be checked against the original paper. The tool never promises perfect transcription or grading.</li>
@@ -105,8 +105,8 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
 <p class="mini">Your selected image files and temporary results are cleared from this page by the Clear button or by closing the page. This browser does not store a grading history.</p>
 </aside>
 </div>
-<section id="results" class="card" hidden aria-labelledby="results-heading"><div class="resulthead"><div><h2 id="results-heading">Temporary grading summary</h2><p class="resultname">Name detected: <strong id="studentname">—</strong> <span id="nameconfidence"></span></p></div><div class="scoresummary" id="total">—</div></div>
-<p class="alert warn" id="reviewwarning">All results are provisional; inspect the actual paper and verify each criterion before finalizing grades.</p><div id="itemresults"></div><div class="actionrow"><button id="copy" class="btn" type="button">Copy temporary summary</button><button id="clear2" class="btn" type="button">Clear now</button></div></section>
+<section id="results" class="card" hidden aria-labelledby="results-heading"><p class="mini" id="report-date" style="margin:0 0 10px">—</p><div class="resulthead"><div><h2 id="results-heading">Temporary grading summary</h2><p class="resultname">Name detected: <strong id="studentname">—</strong> <span id="nameconfidence"></span></p></div><div class="scoresummary" id="total">—</div></div>
+<p class="mini" id="report-assessment">—</p><p class="alert warn" id="reviewwarning">All results are provisional; inspect the actual paper and verify each criterion before finalizing grades.</p><div id="itemresults"></div><div class="actionrow"><button id="copy" class="btn" type="button">Copy temporary summary</button><button id="print-result" class="btn primary" type="button">Print result</button><button id="save-pdf" class="btn" type="button">Save as PDF</button><button id="clear2" class="btn" type="button">Clear now</button></div></section>
 </main>
 <footer>ARTHREYSQUARED Group · Private Instructor Tools · No automatic recording of grades</footer>
 <script>
@@ -114,7 +114,9 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
   "use strict";
   const byId = id => document.getElementById(id);
   const assessment = byId("assessment"), list = byId("item-list");
-  const photos = byId("photos"), previews = byId("previews");
+  const photos = byId("photos"), cameraPhoto = byId("camera-photo"), previews = byId("previews");
+  const cameraVideo=byId("live-camera"), openCamera=byId("open-camera"), takePhoto=byId("take-photo"), stopCamera=byId("stop-camera");
+  let cameraStream=null;
   const status = byId("status"), analyze = byId("analyze"), authorized = byId("authorized");
   const results = byId("results"), itemresults = byId("itemresults");
   const state = { config: {}, files: [], objectUrls: [], lastResult: null };
@@ -149,7 +151,58 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
       previews.appendChild(box);
     });
   }
+  function acceptFiles(files) {
+    const proposed=state.files.concat(files);
+    const allowed=["image/jpeg","image/png","image/webp"];
+    if(proposed.length>5 || proposed.some(f => !allowed.includes(f.type) || f.size>5*1024*1024) ||
+      proposed.reduce((total,f)=>total+f.size,0)>20*1024*1024) {
+      setStatus("Use up to 5 JPEG, PNG or WebP photos, maximum 5 MB per image and 20 MB combined.", "danger");
+      return;
+    }
+    state.files=proposed;addPreview();updateReady();
+    setStatus(state.files.length+" photo(s) ready. Review all pages before analysis.");
+  }
   photos.addEventListener("change", () => {
+    const files = [...photos.files];
+    photos.value="";
+    acceptFiles(files);
+  });
+  cameraPhoto.addEventListener("change", () => {
+    const files=[...cameraPhoto.files];cameraPhoto.value="";
+    acceptFiles(files);
+  });
+  function stopVideo(){
+    if(cameraStream){ cameraStream.getTracks().forEach(t=>t.stop()); cameraStream=null; }
+    cameraVideo.srcObject=null;cameraVideo.hidden=true;
+    takePhoto.hidden=true;stopCamera.hidden=true;openCamera.hidden=false;
+  }
+  openCamera.addEventListener("click",async()=>{
+    if(!navigator.mediaDevices?.getUserMedia) return setStatus("Live camera is unavailable on this device. Use the camera file option.", "warn");
+    try{
+      cameraStream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"}}});
+      cameraVideo.srcObject=cameraStream;await cameraVideo.play();
+      cameraVideo.hidden=false;takePhoto.hidden=false;stopCamera.hidden=false;openCamera.hidden=true;
+    }catch{
+      setStatus("Camera permission denied or unavailable. Use Upload or the phone camera option.", "warn");
+    }
+  });
+  takePhoto.addEventListener("click",()=>{
+    const w=cameraVideo.videoWidth,h=cameraVideo.videoHeight;
+    if(!w||!h) return setStatus("Camera is not ready.", "warn");
+    const max=1900,scale=Math.min(1,max/Math.max(w,h));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(w*scale));
+    canvas.height=Math.max(1,Math.round(h*scale));
+    canvas.getContext("2d").drawImage(cameraVideo,0,0,canvas.width,canvas.height);
+    canvas.toBlob(blob=>{
+      if(!blob) return setStatus("Camera capture failed.","danger");
+      const file=new File([blob],"exam-photo-"+(state.files.length+1)+".jpg",{type:"image/jpeg"});
+      acceptFiles([file]);
+    },"image/jpeg",0.89);
+  });
+  stopCamera.addEventListener("click",stopVideo);
+  /* original file change handler replaced below */
+  /*
     const files = [...photos.files];
     const allowed = ["image/jpeg","image/png","image/webp"];
     if (files.length > 5 || files.some(f => !allowed.includes(f.type) || f.size > 5 * 1024 * 1024) ||
@@ -163,6 +216,7 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
     setStatus(files.length ? files.length + " photo(s) selected. Verify legibility before analysis." : "Choose clear photos.");
     updateReady();
   });
+  */
   assessment.addEventListener("change", () => {
     list.replaceChildren();
     const options = state.config[assessment.value] || [];
@@ -182,6 +236,8 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
     for (const url of state.objectUrls) URL.revokeObjectURL(url);
     state.objectUrls = [];
     photos.value = "";
+    cameraPhoto.value="";
+    stopVideo();
     previews.replaceChildren();
     results.hidden = true; itemresults.replaceChildren();
     authorized.checked = false;
@@ -200,6 +256,8 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
   }
   function renderReport(r) {
     state.lastResult = r;
+    byId("report-date").textContent="ARTHREYSQUARED · INSTRUCTOR WORKSHEET · "+new Date().toLocaleString();
+    byId("report-assessment").textContent="Assessment profile: "+String(r.assessment||"");
     byId("studentname").textContent = r.student_name || "Not reliably detected — check original";
     byId("nameconfidence").textContent = " (" + r.name_confidence + " confidence)";
     byId("total").replaceChildren(
@@ -229,6 +287,20 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
         detail.appendChild(line);
       });
       detail.append(node("p", "Review note: " + (it.comment || "No specific comment.")));
+      if(it.corrections?.length){
+        detail.append(node("h3","Specific corrections to consider"));
+        it.corrections.forEach(c=>{
+          const box=node("div","","criteriongrid");
+          box.append(node("span","Student wording: "+(c.original||"—")),
+            node("span","Suggested: "+(c.proposed||"—")),
+            node("small",c.reason||""));
+          detail.appendChild(box);
+        });
+      }
+      if(it.corrected_response){
+        detail.append(node("h3","Suggested revised explanation (not part of the original answer)"));
+        detail.append(node("div",it.corrected_response,"transcription"));
+      }
       (it.warnings || []).forEach(w => detail.append(node("p","⚠ " + w,"review")));
       itemresults.appendChild(detail);
     });
@@ -297,15 +369,13 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
   window.addEventListener("pagehide", () => {
     for (const url of state.objectUrls) URL.revokeObjectURL(url);
     state.objectUrls = [];
+    stopVideo();
     state.files = [];state.lastResult = null;
   });
-  byId("signout").addEventListener("click", async () => {
-    try {
-      await fetch("/api/logout", {method:"POST",credentials:"same-origin",cache:"no-store"});
-    } finally {
-      reset();
-      window.location.replace("/");
-    }
+  byId("print-result").addEventListener("click",()=>window.print());
+  byId("save-pdf").addEventListener("click",()=>{
+    setStatus("In the print dialog, choose Save as PDF as the printer/destination.","success");
+    window.print();
   });
   load();
 }());
