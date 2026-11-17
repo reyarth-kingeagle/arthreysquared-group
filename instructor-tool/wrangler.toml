@@ -1,0 +1,16 @@
+# Deploy this folder as a separate Cloudflare Worker, NOT on GitHub Pages.
+# IMPORTANT: Configure Cloudflare Access to protect the entire Worker before uploading real student papers.
+name = "arthreysquared-instructor"
+main = "worker.js"
+compatibility_date = "2026-11-17"
+workers_dev = true
+
+# Do not send request bodies or student records into application logs.
+[observability]
+enabled = false
+
+# The Worker imports HTML as a text module, avoiding public static asset bypasses.
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true
