@@ -201,22 +201,6 @@ footer{text-align:center;padding:20px 0;color:#607589;font-size:.82rem}
     },"image/jpeg",0.89);
   });
   stopCamera.addEventListener("click",stopVideo);
-  /* original file change handler replaced below */
-  /*
-    const files = [...photos.files];
-    const allowed = ["image/jpeg","image/png","image/webp"];
-    if (files.length > 5 || files.some(f => !allowed.includes(f.type) || f.size > 5 * 1024 * 1024) ||
-       files.reduce((a,f) => a+f.size,0) > 20 * 1024 * 1024) {
-      photos.value = "";
-      state.files = []; addPreview(); updateReady();
-      return setStatus("Choose 1–5 JPEG, PNG or WebP images; max 5 MB each and 20 MB total.", "danger");
-    }
-    state.files = files;
-    addPreview();
-    setStatus(files.length ? files.length + " photo(s) selected. Verify legibility before analysis." : "Choose clear photos.");
-    updateReady();
-  });
-  */
   assessment.addEventListener("change", () => {
     list.replaceChildren();
     const options = state.config[assessment.value] || [];
