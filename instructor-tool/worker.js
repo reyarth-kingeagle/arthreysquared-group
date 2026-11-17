@@ -1,10 +1,12 @@
 /**
  * ARTHREYSQUARED private instructor tool. Deploy separately with Cloudflare Workers.
  * NEVER use GitHub Pages or browser-side API keys for identifiable student papers.
- * This Worker FAILS CLOSED if Cloudflare Access has not authenticated the instructor.
+ * This Worker uses server-verified username and access code; the public source has no password.
  * Does not persist incoming images, essays, names, or scores.
  */
 import page from "./app.html";
+import loginPage from "./login.html";
+import { hasSession, login, logout } from "./auth.js";
 
 const IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_IMAGES = 5;
@@ -275,31 +277,45 @@ async function grade(request, env, rubrics) {
 }
 
 export default {
-  async fetch(request, env, ctx) {
-    // Cloudflare Access authentication is required even to load the HTML.
-    // With access not enabled, ctx.access is undefined and the Worker rejects everyone.
-    if (!ctx.access || !env.AUTHORIZED_EMAIL || !env.RUBRICS_JSON) return denied();
-    let identity;
-    try { identity = await ctx.access.getIdentity(); }
-    catch { return denied(); }
-    if (!identity || !identity.email ||
-      identity.email.trim().toLowerCase() !== env.AUTHORIZED_EMAIL.trim().toLowerCase()) return denied();
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+
+    // Only server-authenticated sessions reach the private grading interface.
+    // Public hosting does not contain the instructor credentials or rubric.
+    if (request.method === "POST" && pathname === "/api/login") {
+      return login(request, env);
+    }
+    if (request.method === "POST" && pathname === "/api/logout") {
+      return logout(request);
+    }
+
+    const valid = await hasSession(request, env);
+    if (request.method === "GET" && (pathname === "/" || pathname === "/index.html")) {
+      return new Response(valid ? page : loginPage, {
+        headers: { ...NO_STORE, "Content-Type": "text/html; charset=utf-8" }
+      });
+    }
+    if (!valid) return denied();
 
     let rubrics;
-    try { rubrics = cleanItems(JSON.parse(env.RUBRICS_JSON)); }
+    try { rubrics = cleanItems(JSON.parse(env.RUBRICS_JSON || "")); }
     catch { return json({ error: "Private rubric configuration is invalid." }, 503); }
     if (!rubrics) return json({ error: "Private rubric configuration missing." }, 503);
-    const { pathname } = new URL(request.url);
-    if (request.method === "GET" && (pathname === "/" || pathname === "/index.html")) {
-      return new Response(page, { headers: { ...NO_STORE, "Content-Type": "text/html; charset=utf-8" } });
-    }
+
     if (request.method === "GET" && pathname === "/api/config") {
       return json({ assessments: Object.fromEntries(
         Object.entries(rubrics).map(([key, items]) => [key,
           items.map(x => ({ id: x.id, label: x.label, max: x.max }))])
-      ), privacy: "The app does not persist files or results. API processing is subject to the provider's own retention policy." });
+      ), privacy: "The app does not persist files or results. AI provider retention policies may apply." });
     }
     if (request.method === "POST" && pathname === "/api/grade") {
+      // Rate-limit expensive authenticated requests as well.
+      // Missing or broken throttling causes denial rather than unbounded API use.
+      if (!env.GRADE_RATE_LIMITER) return json({ error: "Request protection is not configured." }, 503);
+      try {
+        const limit = await env.GRADE_RATE_LIMITER.limit({key:"instructor:grade"});
+        if (!limit.success) return json({ error: "Too many requests. Try again later." }, 429);
+      } catch { return json({ error: "Request protection is unavailable." }, 503); }
       return grade(request, env, rubrics);
     }
     return json({ error: "Not found." }, 404);
