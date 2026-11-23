@@ -158,6 +158,38 @@
     .bet117 .bet-study-guide-promo a:hover, .bet117 .bet-study-topic-link:hover { background:#084e49; }
     .bet117 .bet-topic-study-action { margin-top:17px!important; }
     @media(max-width:680px){ .bet117 .bet-study-guide-promo a { width:100%; justify-content:center; text-align:center; } }
+
+    /* BET 117 group-topic quizzes */
+    .bet117 .bet-quiz-info { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:17px 0; }
+    .bet117 .bet-quiz-deadline,.bet117 .bet-quiz-timing { display:flex; flex-direction:column; gap:5px; min-width:0; padding:19px 21px; border:1px solid #cddce7; border-radius:15px; background:#f0f6fa; }
+    .bet117 .bet-quiz-deadline { border-left:4px solid #c09a54; background:#faf7f0; }
+    .bet117 .bet-quiz-info-label { font-size:.76rem; text-transform:uppercase; font-weight:850; letter-spacing:.09em; color:#4f6578; }
+    .bet117 .bet-quiz-info strong { font-size:clamp(1.06rem,2.5vw,1.38rem); color:#123651; line-height:1.35; }
+    .bet117 .bet-quiz-info span:last-child { font-size:.84rem; color:#52657b; }
+    .bet117 .bet-quiz-instructions { margin:14px 0 27px; padding:20px 24px; border:1px solid #b7d8d3; border-radius:15px; background:#f0f8f5; }
+    .bet117 .bet-quiz-instructions h3 { margin:0 0 10px; color:#0a5957; font-size:1.08rem; }
+    .bet117 .bet-quiz-instructions ol { margin:0; padding-left:22px; color:#2e4d60; }
+    .bet117 .bet-quiz-instructions li { padding-left:4px; }
+    .bet117 .bet-quiz-instructions li + li { margin-top:9px; }
+    .bet117 .bet-quiz-group { margin-top:24px; }
+    .bet117 .bet-quiz-group-heading { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:5px 14px; margin-bottom:12px; }
+    .bet117 .bet-quiz-group-heading h3 { margin:0; font-size:1.16rem; line-height:1.35; color:#143955; }
+    .bet117 .bet-quiz-group-heading span { font-size:.84rem; color:#60718a; }
+    .bet117 .bet-quiz-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .bet117 .bet-quiz-card { display:flex; flex-direction:column; justify-content:space-between; gap:19px; min-width:0; padding:20px; border:1px solid #d6e2eb; border-radius:16px; background:#fff; box-shadow:0 2px 11px rgba(16,45,72,.035); }
+    .bet117 .bet-quiz-card-head { display:flex; align-items:flex-start; gap:13px; }
+    .bet117 .bet-quiz-number { flex:0 0 43px; display:grid; place-items:center; height:43px; border-radius:12px; background:#ecf5f5; color:#106b68; font-weight:900; font-size:.94rem; }
+    .bet117 .bet-quiz-card-eyebrow { display:block; margin-bottom:5px; color:#0d756e; font-size:.72rem; font-weight:850; text-transform:uppercase; letter-spacing:.08em; }
+    .bet117 .bet-quiz-card h4 { margin:0; color:#163955; line-height:1.4; font-size:1rem; overflow-wrap:anywhere; }
+    .bet117 .bet-quiz-link { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:46px; border-radius:10px; padding:10px 16px; background:#0b6862; color:#fff; font-size:.89rem; font-weight:800; text-decoration:none; }
+    .bet117 .bet-quiz-link:hover { background:#084e49; }
+    .bet117 .bet-quiz-footnote { margin-top:20px; font-size:.82rem; color:#5b7183; }
+    @media (max-width:680px) {
+      .bet117 .bet-quiz-info,.bet117 .bet-quiz-grid { grid-template-columns:1fr; }
+      .bet117 .bet-quiz-instructions { padding:18px; }
+      .bet117 .bet-quiz-card { padding:17px; gap:14px; }
+      .bet117 .bet-quiz-link { width:100%; }
+    }
   </style>
 </head>
 <body class="bet117" data-subject="msuiit-bet117">
@@ -203,6 +235,7 @@
       <a href="#learning-path">Learning path</a>
       <a href="bet117-study-guide.html">Full study notes</a>
       <a href="#resources">Study resources</a>
+      <a href="#quizzes">Quizzes</a>
       <a href="#assessment">Assessments</a>
       <a href="#case-study">Final project</a>
       <a href="#questions">Common questions</a>
@@ -297,6 +330,157 @@
         <a class="bet-resource" href="https://www.ellenmacarthurfoundation.org/topics/circular-economy-introduction/overview" target="_blank" rel="noopener noreferrer"><small>Ellen MacArthur Foundation</small><strong>Circular Economy Overview</strong><span>Resource efficiency, reuse and regeneration ↗</span></a>
         <a class="bet-resource" href="https://www8.cao.go.jp/cstp/english/society5_0/" target="_blank" rel="noopener noreferrer"><small>Cabinet Office of Japan</small><strong>Society 5.0</strong><span>Human-centered technological development ↗</span></a>
       </div>
+    </section>
+
+    <section id="quizzes" class="bet-section" aria-labelledby="quizzes-heading">
+      <div class="bet-section-title">
+        <h2 id="quizzes-heading">Group Topic Quizzes</h2>
+        <p>9 quizzes · Google Forms</p>
+      </div>
+      <p class="bet-intro">Complete each quiz for its corresponding BET 117 group topic. Read the instructions before opening any quiz form.</p>
+
+      <div class="bet-quiz-info" aria-label="Quiz submission instructions">
+        <div class="bet-quiz-deadline">
+          <span class="bet-quiz-info-label">Final submission deadline</span>
+          <strong><time datetime="2026-12-13T23:59:00+08:00">December 13, 2026 · 11:59 PM</time></strong>
+          <span>Philippine Standard Time (UTC+8)</span>
+        </div>
+        <div class="bet-quiz-timing">
+          <span class="bet-quiz-info-label">Time allowed per quiz</span>
+          <strong>60 minutes maximum</strong>
+          <span>Measured from the moment you first open the quiz form</span>
+        </div>
+      </div>
+
+      <div class="bet-quiz-instructions">
+        <h3>Instructions for students</h3>
+        <ol>
+          <li><strong>Use your institutional email address</strong> when completing each Google Form so your submission can be identified and recorded.</li>
+          <li><strong>Finish and submit each quiz within one hour (60 minutes) of opening its form.</strong> Responses taking longer than one hour from opening will be considered invalid.</li>
+          <li><strong>Submit all quizzes by December 13, 2026, at 11:59 PM (Philippine Time).</strong> Submissions after the deadline will not be considered valid.</li>
+          <li>Check that you have submitted your answers successfully before closing the form.</li>
+        </ol>
+      </div>
+
+      <div class="bet-quiz-group">
+        <div class="bet-quiz-group-heading"><h3>Preliminary Topics</h3><span>Groups 1–5</span></div>
+        <div class="bet-quiz-grid">
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">01</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 1</span>
+                <h4>Introduction to Technology &amp; Society</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/zJjhRWjQf6ojcgjY8" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 1: Introduction to Technology &amp; Society in Google Forms">
+              Open Quiz 1 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">02</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 2</span>
+                <h4>Industrial Revolution</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/K44bkitWmEe5kCeU8" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 2: Industrial Revolution in Google Forms">
+              Open Quiz 2 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">03</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 3</span>
+                <h4>The Innovation Process &amp; Technology Life Cycle</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/CBLpk4eq67zKjA5k7" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 3: The Innovation Process &amp; Technology Life Cycle in Google Forms">
+              Open Quiz 3 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">04</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 4</span>
+                <h4>The Digital &amp; Information Age – Knowledge Assessment</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/HuWvMVj2Hs7rcHw1A" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 4: The Digital &amp; Information Age – Knowledge Assessment in Google Forms">
+              Open Quiz 4 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">05</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 5</span>
+                <h4>Ethics &amp; Professional Responsibility</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/tyuheZjM24ezKkZn9" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 5: Ethics &amp; Professional Responsibility in Google Forms">
+              Open Quiz 5 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+        </div>
+      </div>
+      <div class="bet-quiz-group">
+        <div class="bet-quiz-group-heading"><h3>Midterm Topics</h3><span>Groups 6–9</span></div>
+        <div class="bet-quiz-grid">
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">06</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 6</span>
+                <h4>Technology Governance, Privacy &amp; Cybersecurity</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/wyweuFfSjBxAVbLJ8" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 6: Technology Governance, Privacy &amp; Cybersecurity in Google Forms">
+              Open Quiz 6 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">07</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 7</span>
+                <h4>Sustainable Engineering &amp; Green Technology</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/xG1J3ha76PK5g2LE6" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 7: Sustainable Engineering &amp; Green Technology in Google Forms">
+              Open Quiz 7 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">08</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 8</span>
+                <h4>Emerging Technologies &amp; Smart Systems</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/wLzwsU8wNJL5dQjm7" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 8: Emerging Technologies &amp; Smart Systems in Google Forms">
+              Open Quiz 8 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+          <article class="bet-quiz-card">
+            <div class="bet-quiz-card-head">
+              <span class="bet-quiz-number" aria-hidden="true">09</span>
+              <div>
+                <span class="bet-quiz-card-eyebrow">Quiz 9</span>
+                <h4>Technology for Local and Global Development</h4>
+              </div>
+            </div>
+            <a class="bet-quiz-link" href="https://forms.gle/hVNMo1LiPAGMz7Ci8" target="_blank" rel="noopener noreferrer" aria-label="Open Quiz 9: Technology for Local and Global Development in Google Forms">
+              Open Quiz 9 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+        </div>
+      </div>
+      <p class="bet-quiz-footnote">Each link opens the corresponding Google Form in a new tab. The stated one-hour validity rule and submission deadline are course requirements.</p>
     </section>
 
     <section id="assessment" class="bet-section" aria-labelledby="assessment-heading">
